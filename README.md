@@ -1,3 +1,3 @@
 # Functionality
 
-text-quest - spannable strings
+text_quest - spannable strings
