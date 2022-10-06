@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Fields and buttons</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="invalid_email">Invalid E-mail Format</string>
+    <string name="invalid_password">Password should contain one of each: a–z, A–Z, 0–9, !@#$%^<![CDATA[&]]>*</string>
+    <string name="register">Register</string>
+</resources>

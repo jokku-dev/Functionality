@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Functionality</string>
+    <string name="story_text">Some exciting text</string>
+    <string name="answer1_text">Answer 1</string>
+    <string name="answer2_text">Answer 2</string>
+    <string name="story_answer1_text">Exciting text after first answer</string>
+    <string name="story_answer2_text">Exciting text after second answer</string>
+    <string name="high_res_image_desc">high res image</string>
+</resources>

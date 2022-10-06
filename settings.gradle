@@ -13,4 +13,6 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Functionality"
-include ':text_quest'
+include ':text-quest'
+include ':images'
+include ':fields-and-buttons'
