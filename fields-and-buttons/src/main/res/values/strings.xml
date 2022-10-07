@@ -5,4 +5,9 @@
     <string name="invalid_email">Invalid E-mail Format</string>
     <string name="invalid_password">Password should contain one of each: a–z, A–Z, 0–9, !@#$%^<![CDATA[&]]>*</string>
     <string name="register">Register</string>
+    <string name="agreement">I agree with terms of use and policy</string>
+    <string name="attention">Attention</string>
+    <string name="service_is_unavailable">Service is unavailable</string>
+    <string name="close">Close</string>
+    <string name="ok_dialog">OK</string>
 </resources>
