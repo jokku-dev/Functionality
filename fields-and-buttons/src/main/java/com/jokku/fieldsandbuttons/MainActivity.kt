@@ -3,7 +3,6 @@ package com.jokku.fieldsandbuttons
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.SpannableString
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +12,24 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.util.regex.Pattern
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        const val passwordRegex =
+            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=\\S+$).{4,}$"
+
+        const val INITIAL = 0
+        const val PROGRESS = 1
+        const val SUCCESS = 2
+        const val FAILED = 3
+    }
+    private var state = INITIAL
+    private lateinit var viewModel: ViewModel
     private lateinit var contentLayout: ViewGroup
     private lateinit var loginLayout: TextInputLayout
     private lateinit var loginEdit: TextInputEditText
@@ -28,15 +39,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var agreementCheck: CheckBox
     private lateinit var registerBtn: Button
 
-    companion object {
-        const val passwordRegex =
-            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=\\S+$).{4,}$"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        viewModel = (application as MyApplication).viewModel
         contentLayout = findViewById(R.id.contentLayout)
         loginLayout = findViewById(R.id.login_lo)
         loginEdit = loginLayout.editText as TextInputEditText
@@ -46,14 +53,48 @@ class MainActivity : AppCompatActivity() {
         agreementCheck = findViewById(R.id.terms_cb)
         registerBtn = findViewById(R.id.login_btn)
 
-        val agreementSpannable = SpannableString(getString(R.string.agreement))
-        agreementCheck.text = agreementSpannable
         registerBtn.isEnabled = false
 
         validateLogin()
         validatePassword()
         implCheckBox()
         implRegisterBtn()
+
+        val observable = TextObservable()
+        observable.observe(object : TextCallback{
+            override fun updateText(str: String) = runOnUiThread {
+                TODO("implement view and view model interaction")
+            }
+        })
+
+        if (savedInstanceState != null) {
+            state = savedInstanceState.getInt("state")
+        }
+        when (state) {
+            FAILED -> showBottomDialog()
+            SUCCESS -> {
+                Snackbar.make(contentLayout, "SuccessState", Snackbar.LENGTH_SHORT).show()
+                state = INITIAL
+            }
+        }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        loginEdit.setText(savedInstanceState.getString("login"))
+        passwordEdit.setText(savedInstanceState.getString("password"))
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("login", loginEdit.text.toString())
+        outState.putString("password", passwordEdit.text.toString())
+        outState.putInt("state", state)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.clear()
     }
 
     private fun validateLogin() {
@@ -105,26 +146,34 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show()
                 contentLayout.visibility = GONE
                 progressBar.visibility = VISIBLE
+                state = PROGRESS
                 Handler(Looper.myLooper()!!).postDelayed({
+                    state = FAILED
                     contentLayout.visibility = VISIBLE
                     progressBar.visibility = GONE
-                    //we need to instantiate dialog layout if we need interaction with its views
-                    val dialogLayout = LayoutInflater.from(this).inflate(
-                        R.layout.dialog, contentLayout, false
-                    )
-                    BottomSheetDialog(this).run {
-                        dialogLayout.findViewById<ImageButton>(R.id.closeBtn).setOnClickListener {
-                            dismiss()
-                        }
-                        setContentView(dialogLayout)
-                        setCancelable(false)
-                        show()
-                    }
+                    showBottomDialog()
                     MyDialogFragment().show(supportFragmentManager, "Alert")
                 }, 3000)
             } else {
                 Toast.makeText(this, "Login or password is invalid", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun showBottomDialog() {
+        //we need to instantiate dialog layout if we need interactions with its views
+        val dialogLayout = LayoutInflater.from(this).inflate(
+            R.layout.dialog, contentLayout, false
+        )
+        BottomSheetDialog(this).run {
+            dialogLayout.findViewById<ImageButton>(R.id.closeBtn).setOnClickListener {
+                state = INITIAL
+                dismiss()
+                registerBtn.isEnabled = true
+            }
+            setContentView(dialogLayout)
+            setCancelable(false)
+            show()
         }
     }
 
