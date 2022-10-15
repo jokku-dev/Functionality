@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         const val FAILED = 3
     }
     private var state = INITIAL
-    private lateinit var viewModel: ViewModel
     private lateinit var contentLayout: ViewGroup
     private lateinit var loginLayout: TextInputLayout
     private lateinit var loginEdit: TextInputEditText
@@ -43,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = (application as MyApplication).viewModel
         contentLayout = findViewById(R.id.contentLayout)
         loginLayout = findViewById(R.id.login_lo)
         loginEdit = loginLayout.editText as TextInputEditText
@@ -59,13 +57,6 @@ class MainActivity : AppCompatActivity() {
         validatePassword()
         implCheckBox()
         implRegisterBtn()
-
-        val observable = TextObservable()
-        observable.observe(object : TextCallback{
-            override fun updateText(str: String) = runOnUiThread {
-                TODO("implement view and view model interaction")
-            }
-        })
 
         if (savedInstanceState != null) {
             state = savedInstanceState.getInt("state")
@@ -90,11 +81,6 @@ class MainActivity : AppCompatActivity() {
         outState.putString("login", loginEdit.text.toString())
         outState.putString("password", passwordEdit.text.toString())
         outState.putInt("state", state)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.clear()
     }
 
     private fun validateLogin() {
