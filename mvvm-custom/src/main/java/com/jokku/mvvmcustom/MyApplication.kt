@@ -8,6 +8,6 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        viewModel = ViewModel(Model(CacheDataSource(this)))
+        viewModel = ViewModel(Model(CacheDataSource(this), TimerTicker()))
     }
 }

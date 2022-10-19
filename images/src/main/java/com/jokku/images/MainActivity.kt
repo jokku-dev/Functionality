@@ -6,20 +6,22 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.jokku.functionality.R
+import com.jokku.images.databinding.ActivityMainBinding
 import com.squareup.picasso.Transformation
 
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var  binding: ActivityMainBinding
     private lateinit var image: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        image = findViewById(R.id.image)
-        image.load("https://mfiles.alphacoders.com/896/896768.jpg")
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        image = binding.image
+        image.load("https://mfiles.alphacoders.com/896/896768.jpg")
     }
 
     private fun ImageView.load(url: String) {

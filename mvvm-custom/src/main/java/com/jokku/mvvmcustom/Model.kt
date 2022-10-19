@@ -1,41 +1,38 @@
 package com.jokku.mvvmcustom
 
-import android.os.Handler
-import android.os.Looper
-
-class Model(private val dataSource: DataSource) {
+class Model(
+    private val dataSource: DataSource,
+    private val timeTicker: TimeTicker
+) {
 
     companion object {
         private const val SECONDS = "seconds"
     }
 
-    private lateinit var callback: TextCallback
-    private lateinit var handler: Handler
-    private var seconds = dataSource.getInt(SECONDS)
-
-    fun start(textCallback: TextCallback) {
-        callback = textCallback
-        seconds = if (dataSource.getInt(SECONDS) != 0) dataSource.getInt(SECONDS) else 0
-        handler = Handler(Looper.getMainLooper())
-        val runnable = object : Runnable {
-            override fun run() {
-                callback.updateText(seconds.toString())
-                seconds++
-                handler.postDelayed(this, 1000)
-            }
+    private val tickerCallback = object : TimeTicker.Callback {
+        override fun tick() {
+            seconds++
+            callback?.updateText(seconds.toString())
         }
-        handler.post(runnable)
+    }
+    private var callback: TextCallback? = null
+    private var seconds = 0
+
+    fun start(callback: TextCallback) {
+        this.callback = callback
+        seconds = if (dataSource.getInt(SECONDS) != 0) dataSource.getInt(SECONDS) else 0
+        timeTicker.start(tickerCallback)
     }
 
     fun stop() {
-        handler.removeCallbacksAndMessages(null)
         dataSource.saveInt(SECONDS, seconds)
+        timeTicker.stopOrReset()
     }
 
     fun reset() {
         seconds = 0
-        handler.removeCallbacksAndMessages(null)
         dataSource.saveInt(SECONDS, 0)
-        callback.updateText("0")
+        callback?.updateText("0")
+        timeTicker.stopOrReset()
     }
 }

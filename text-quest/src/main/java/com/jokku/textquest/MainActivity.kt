@@ -1,4 +1,4 @@
-package com.jokku.images
+package com.jokku.textquest
 
 import android.graphics.Color
 import android.os.Bundle
@@ -10,21 +10,23 @@ import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.jokku.functionality.R
+import com.jokku.textquest.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
     private lateinit var story: TextView
     private lateinit var answer1: TextView
     private lateinit var answer2: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        story = findViewById(R.id.story_tv)
-        answer1 = findViewById(R.id.answer1_tv)
-        answer2 = findViewById(R.id.answer2_tv)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
+        story = binding.storyTv
+        answer1 = binding.answer1Tv
+        answer2 = binding.answer2Tv
 
         val secondStoryAfterFirstAnswer = getString(R.string.story_answer1_text)
         val secondStoryAfterSecondAnswer = getString(R.string.story_answer2_text)

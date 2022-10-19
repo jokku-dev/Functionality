@@ -1,4 +1,4 @@
-package com.jokku.images
+package com.jokku.textquest
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
