@@ -1,13 +1,14 @@
 package com.jokku.mvvmcustom
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import com.jokku.mvvm_custom.R
+import androidx.appcompat.app.AppCompatActivity
+import com.jokku.mvvmcustom.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: ViewModel
     private lateinit var counterView: TextView
     private lateinit var startBtn: Button
@@ -16,13 +17,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         viewModel = (application as MyApplication).viewModel
-        counterView = findViewById(R.id.text_counter)
-        startBtn = findViewById(R.id.start_btn)
-        pauseBtn = findViewById(R.id.pause_btn)
-        resetBtn = findViewById(R.id.reset_btn)
+        counterView = binding.textCounter
+        startBtn = binding.startBtn
+        pauseBtn = binding.pauseBtn
+        resetBtn = binding.resetBtn
 
         val textObservable = TextObservable()
         textObservable.observe(object : TextCallback{
