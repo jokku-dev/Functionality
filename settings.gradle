@@ -13,7 +13,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Functionality"
-/*include ':text-quest'
+include ':text-quest'
 include ':images'
-include ':fields-and-buttons'*/
+include ':fields-and-buttons'
 include ':mvvm-custom'

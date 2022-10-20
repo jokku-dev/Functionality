@@ -28,7 +28,7 @@ class TimerModelTest {
         var state = 0
 
         override fun start(callback: TimeTicker.Callback, period: Long) {
-            this.tickerCallback = callback
+            tickerCallback = callback
             state = 1
         }
 
@@ -38,7 +38,7 @@ class TimerModelTest {
         }
 
         fun tick(times: Int) {
-            for (i in 0 until times )
+            for (i in 0 until times)
                 tickerCallback?.tick()
         }
     }
@@ -73,7 +73,57 @@ class TimerModelTest {
         model.stop()
         val savedCountActual = testDataSource.getInt("")
         val savedCountExpected = 2
-        assertEquals(savedCountActual,savedCountExpected)
+        assertEquals(savedCountActual, savedCountExpected)
+    }
+
+    @Test
+    fun test_start_after_stop() {
+        val testDataSource = TestDataSource()
+        val timeTicker = TestTimeTicker()
+        val model = Model(testDataSource, timeTicker)
+        val callback = TestCallback()
+        testDataSource.saveInt("", 10)
+        model.start(callback)
+        timeTicker.tick(2)
+        val actual = callback.text
+        val expected = "12"
+        assertEquals(expected, actual)
+
+        model.stop()
+        val savedCountActual = testDataSource.getInt("")
+        val savedCountExpected = 12
+        assertEquals(savedCountActual, savedCountExpected)
+
+        model.start(callback)
+        timeTicker.tick(3)
+        val actualText = callback.text
+        val expectedText = "15"
+        assertEquals(expectedText, actualText)
+    }
+
+    @Test
+    fun test_saved_number_after_process_restart() {
+        val dataSource = TestDataSource()
+        var timeTicker: TestTimeTicker? = TestTimeTicker()
+        val model =
+            dataSource.let { source -> timeTicker?.let { timeTicker ->
+                Model(source, timeTicker)
+            }
+        }
+        val callback = TestCallback()
+        dataSource.saveInt("", 0)
+        model?.start(callback)
+        timeTicker?.tick(10)
+        model?.stop()
+        //Starting a new process
+        val savedInt = dataSource.getInt("")
+        timeTicker = null
+        val newDataSource =
+            savedInt.let { int -> TestDataSource().apply { saveInt("", int) } }
+
+        val actualText = newDataSource.getInt("")
+        val expectedText = 10
+        assertEquals(expectedText, actualText)
     }
 
 }
