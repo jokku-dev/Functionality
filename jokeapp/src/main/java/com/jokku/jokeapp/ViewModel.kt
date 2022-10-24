@@ -1,27 +1,41 @@
 package com.jokku.jokeapp
 
+import androidx.annotation.DrawableRes
 
 class ViewModel(private val model: Model) {
-    private var callback: TextCallback? = null
+    private var dataCallback: DataCallback? = null
+    private val jokeCallback = object : JokeCallback {
+        override fun provide(joke: Joke) {
+            dataCallback?.let {
+                joke.map(it)
+            }
+        }
+    }
 
-    fun init(callback: TextCallback) {
-        this.callback = callback
-        model.init(object : ResultCallback {
-            override fun provideSuccess(data: UiMapper) = callback.provideText(data.toUiText())
-            override fun provideError(error: Failure) = callback.provideText(error.getMessage())
-        })
+    fun init(callback: DataCallback) {
+        dataCallback = callback
+        model.init(jokeCallback)
     }
 
     fun getJoke() {
         model.getJoke()
     }
 
+    fun chooseFavorites(isChecked: Boolean) {
+
+    }
+
+    fun changeJokeStatus() {
+        model.changeJokeStatus(jokeCallback)
+    }
+
     fun clear() {
-        callback = null
+        dataCallback = null
         model.clear()
     }
 }
 
-interface TextCallback {
+interface DataCallback {
     fun provideText(text: String)
+    fun provideIconRes(@DrawableRes id: Int)
 }

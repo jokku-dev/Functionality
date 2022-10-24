@@ -1,40 +1,80 @@
 package com.jokku.jokeapp
 
 interface Model {
-    fun init(callback: ResultCallback)
+    fun init(callback: JokeCallback)
     fun getJoke()
+    fun changeJokeStatus(jokeCallback: JokeCallback)
     fun clear()
 }
 
-class TestModel(private val resourceManager: ResourceManager) : Model {
-    private var callback: ResultCallback? = null
-    private var count = 0
-    private val noConnection = NoConnection(resourceManager)
-    private val serviceUnavailable = ServiceUnavailable(resourceManager)
+class BaseModel(
+    private val cacheDataSource: CacheDataSource,
+    private val cloudDataSource: CloudDataSource,
+    private val resourceManager: ResourceManager
+) : Model {
+    private val noConnection by lazy { NoConnection(resourceManager) }
+    private val serviceUnavailable by lazy { ServiceUnavailable(resourceManager) }
+    private var jokeCallback: JokeCallback? = null
+    private var cachedJokeServerModel: JokeServerModel? = null
 
-    override fun init(callback: ResultCallback) {
-        this.callback = callback
+    override fun init(callback: JokeCallback) {
+        jokeCallback = callback
     }
 
     override fun getJoke() {
-        Thread {
-            Thread.sleep(1000)
-            when (count) {
-                0 -> callback?.provideSuccess(Joke("testText", "testPunchline"))
-                1 -> callback?.provideError(noConnection)
-                2 -> callback?.provideError(serviceUnavailable)
+        cloudDataSource.getJoke(object : JokeCloudCallback {
+            override fun provide(joke: JokeServerModel) {
+                cachedJokeServerModel = joke
+                jokeCallback?.provide(joke.toBaseJoke())
             }
-            count++
-            if (count == 3) count = 0
-        }.start()
+
+            override fun fail(error: ErrorType) {
+                cachedJokeServerModel = null
+                val failure = if (error == ErrorType.NO_CONNECTION) noConnection else serviceUnavailable
+                jokeCallback?.provide(FailedJoke(failure.getMessage()))
+            }
+        })
+    }
+
+    override fun changeJokeStatus(jokeCallback: JokeCallback) {
+        cachedJokeServerModel?.change(cacheDataSource)?.let {
+            jokeCallback.provide(it)
+        }
     }
 
     override fun clear() {
-        callback = null
+        jokeCallback = null
     }
 }
 
-interface ResultCallback {
-    fun provideSuccess(data: UiMapper)
-    fun provideError(error: Failure)
+class TestModel(resourceManager: ResourceManager) : Model {
+    private var jokeCallback: JokeCallback? = null
+    private var count = 1
+    private val serviceUnavailable by lazy { ServiceUnavailable(resourceManager) }
+
+    override fun init(callback: JokeCallback) {
+        jokeCallback = callback
+    }
+
+    override fun getJoke() {
+        Thread.sleep(1000)
+        when (count) {
+            0 -> jokeCallback?.provide(BaseJoke("baseSetup", "basePunchline"))
+            1 -> jokeCallback?.provide(FavoriteJoke("favoriteSetup", "favoritePunchline"))
+            2 -> jokeCallback?.provide(FailedJoke(serviceUnavailable.getMessage()))
+        }
+        if (count < 2) count++ else count = 0
+    }
+
+    override fun changeJokeStatus(jokeCallback: JokeCallback) {
+        TODO("Not yet implemented")
+    }
+
+    override fun clear() {
+        jokeCallback = null
+    }
+}
+
+interface JokeCallback {
+    fun provide(joke: Joke)
 }
