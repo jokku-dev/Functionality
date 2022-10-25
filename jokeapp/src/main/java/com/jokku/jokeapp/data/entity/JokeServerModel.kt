@@ -1,6 +1,9 @@
-package com.jokku.jokeapp
+package com.jokku.jokeapp.data.entity
 
 import com.google.gson.annotations.SerializedName
+import com.jokku.jokeapp.data.source.CacheDataSource
+import com.jokku.jokeapp.model.BaseJoke
+import com.jokku.jokeapp.model.FavoriteJoke
 
 data class JokeServerModel(
     @SerializedName("id")

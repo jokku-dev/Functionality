@@ -1,12 +1,12 @@
-package com.jokku.jokeapp
+package com.jokku.jokeapp.view
 
 import android.os.Bundle
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.ImageButton
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.jokku.jokeapp.JokeApplication
+import com.jokku.jokeapp.R
+import com.jokku.jokeapp.model.DisplayCallback
+import com.jokku.jokeapp.model.ViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: ViewModel
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         progressBar.visibility = ProgressBar.INVISIBLE
         imageBtn.visibility = ImageButton.INVISIBLE
 
-        viewModel.init(object : DataCallback {
+        viewModel.init(object : DisplayCallback {
             override fun provideText(text: String) = runOnUiThread {
                 button.isEnabled = true
                 progressBar.visibility = ProgressBar.INVISIBLE

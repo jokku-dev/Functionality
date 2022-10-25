@@ -1,5 +1,6 @@
-package com.jokku.jokeapp
+package com.jokku.jokeapp.data.source
 
+import com.jokku.jokeapp.data.entity.JokeServerModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,7 +14,8 @@ class BaseCloudDataSource(private val service: JokeService) : CloudDataSource {
     override fun getJoke(jokeCloudCallback: JokeCloudCallback) {
         service.getJoke().enqueue(object : Callback<JokeServerModel> {
             override fun onResponse(
-                call: Call<JokeServerModel>, response: Response<JokeServerModel>
+                call: Call<JokeServerModel>,
+                response: Response<JokeServerModel>
             ) {
                 if (response.isSuccessful) {
                     jokeCloudCallback.provide(response.body()!!)
@@ -22,7 +24,10 @@ class BaseCloudDataSource(private val service: JokeService) : CloudDataSource {
                 }
             }
 
-            override fun onFailure(call: Call<JokeServerModel>, t: Throwable) {
+            override fun onFailure(
+                call: Call<JokeServerModel>,
+                t: Throwable
+            ) {
                 if (t is UnknownHostException)
                     jokeCloudCallback.fail(ErrorType.NO_CONNECTION)
                 else
@@ -33,8 +38,13 @@ class BaseCloudDataSource(private val service: JokeService) : CloudDataSource {
 }
 
 class TestCloudDataSource : CloudDataSource {
+    private var count = 0
     override fun getJoke(jokeCloudCallback: JokeCloudCallback) {
-        jokeCloudCallback.provide(JokeServerModel(0,"TestPunchline","TestSetup","TestType"))
+        val joke = JokeServerModel(
+            count,"TestPunchline$count","TestSetup$count","TestType"
+        )
+        jokeCloudCallback.provide(joke)
+        count++
     }
 }
 

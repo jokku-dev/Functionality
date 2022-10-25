@@ -1,4 +1,4 @@
-package com.jokku.jokeapp
+package com.jokku.jokeapp.util
 
 import android.content.Context
 import androidx.annotation.StringRes

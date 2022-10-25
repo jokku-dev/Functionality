@@ -1,19 +1,21 @@
-package com.jokku.jokeapp
+package com.jokku.jokeapp.model
 
 import androidx.annotation.DrawableRes
+import com.jokku.jokeapp.data.JokeCallback
+import com.jokku.jokeapp.data.Model
 
 class ViewModel(private val model: Model) {
-    private var dataCallback: DataCallback? = null
+    private var displayCallback: DisplayCallback? = null
     private val jokeCallback = object : JokeCallback {
         override fun provide(joke: Joke) {
-            dataCallback?.let {
+            displayCallback?.let {
                 joke.map(it)
             }
         }
     }
 
-    fun init(callback: DataCallback) {
-        dataCallback = callback
+    fun init(callback: DisplayCallback) {
+        displayCallback = callback
         model.init(jokeCallback)
     }
 
@@ -21,8 +23,8 @@ class ViewModel(private val model: Model) {
         model.getJoke()
     }
 
-    fun chooseFavorites(isChecked: Boolean) {
-
+    fun chooseFavorites(isFavorite: Boolean) {
+        model.chooseDataSource(isFavorite)
     }
 
     fun changeJokeStatus() {
@@ -30,12 +32,12 @@ class ViewModel(private val model: Model) {
     }
 
     fun clear() {
-        dataCallback = null
+        displayCallback = null
         model.clear()
     }
 }
 
-interface DataCallback {
+interface DisplayCallback {
     fun provideText(text: String)
     fun provideIconRes(@DrawableRes id: Int)
 }
