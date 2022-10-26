@@ -12,7 +12,7 @@ class MyDialogFragment : DialogFragment() {
             val builder = AlertDialog.Builder(it)
             builder.setTitle(R.string.attention)
                 .setMessage(R.string.service_is_unavailable)
-                .setPositiveButton(R.string.ok_dialog) { dialog, which ->
+                .setPositiveButton(R.string.ok_dialog) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .create()

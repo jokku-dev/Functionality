@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun validateLogin() {
         val invalidEmailMsg = getString(R.string.invalid_email)
-        loginEdit.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
+        loginEdit.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val valid = Patterns.EMAIL_ADDRESS.matcher(loginEdit.text.toString()).matches()
                 loginLayout.isErrorEnabled = !valid
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun validatePassword() {
         val invalidPasswordMsg = getString(R.string.invalid_password)
-        passwordEdit.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
+        passwordEdit.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val valid = Pattern.compile(passwordRegex).matcher(passwordEdit.text.toString())
                     .matches()
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun implCheckBox() {
-        agreementCheck.setOnCheckedChangeListener { buttonView, isChecked ->
+        agreementCheck.setOnCheckedChangeListener { _, isChecked ->
             registerBtn.isEnabled = isChecked
         }
     }

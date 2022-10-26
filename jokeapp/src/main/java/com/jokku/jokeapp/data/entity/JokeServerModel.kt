@@ -19,5 +19,14 @@ data class JokeServerModel(
 
     fun toFavoriteJoke() = FavoriteJoke(setup, punchline)
 
+    fun toJokeRealm(): JokeRealm {
+      return JokeRealm().also {
+          it.id = id
+          it.setup = setup
+          it.punchline = punchline
+          it.type = type
+      }
+    }
+
     fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(id,this)
 }
