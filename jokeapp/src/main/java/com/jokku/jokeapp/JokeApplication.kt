@@ -2,8 +2,10 @@ package com.jokku.jokeapp
 
 import android.app.Application
 import com.jokku.jokeapp.data.BaseModel
-import com.jokku.jokeapp.data.entity.JokeRealm
-import com.jokku.jokeapp.data.source.*
+import com.jokku.jokeapp.data.entity.JokeRealmModel
+import com.jokku.jokeapp.data.source.BaseCacheDataSource
+import com.jokku.jokeapp.data.source.BaseCloudDataSource
+import com.jokku.jokeapp.data.source.JokeService
 import com.jokku.jokeapp.model.ViewModel
 import com.jokku.jokeapp.util.BaseResourceManager
 import io.realm.kotlin.Realm
@@ -17,7 +19,7 @@ class JokeApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val config = RealmConfiguration.Builder(setOf(JokeRealm::class)).build()
+        val config = RealmConfiguration.Builder(setOf(JokeRealmModel::class)).build()
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://www.google.com")

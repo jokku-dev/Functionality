@@ -1,55 +1,61 @@
 package com.jokku.jokeapp.data.source
 
 import com.jokku.jokeapp.data.entity.JokeServerModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.jokku.jokeapp.model.Joke
 import java.net.UnknownHostException
 
 interface CloudDataSource {
-    fun getJoke(jokeCloudCallback: JokeCloudCallback)
+    suspend fun getJoke(): Result<JokeServerModel, ErrorType>
 }
 
 class BaseCloudDataSource(private val service: JokeService) : CloudDataSource {
-    override fun getJoke(jokeCloudCallback: JokeCloudCallback) {
-        service.getJoke().enqueue(object : Callback<JokeServerModel> {
+    override suspend fun getJoke() : Result<JokeServerModel, ErrorType> {
+        return try {
+            val result = service.getJoke()
+            Result.Success(result)
+        } catch (e: Exception) {
+            val errorType = if (e is UnknownHostException)
+                ErrorType.NO_CONNECTION
+            else
+                ErrorType.SERVICE_UNAVAILABLE
+            Result.Error(errorType)
+        }
+        /*service.getJoke().enqueue(object : Callback<JokeServerModel> {
             override fun onResponse(
                 call: Call<JokeServerModel>,
                 response: Response<JokeServerModel>
             ) {
                 if (response.isSuccessful) {
-                    jokeCloudCallback.provide(response.body()!!)
+                    jokeCloudCallback.provide(response.body()!!.toJoke())
                 } else {
                     jokeCloudCallback.fail(ErrorType.SERVICE_UNAVAILABLE)
                 }
             }
 
-            override fun onFailure(
-                call: Call<JokeServerModel>,
-                t: Throwable
-            ) {
-                if (t is UnknownHostException)
-                    jokeCloudCallback.fail(ErrorType.NO_CONNECTION)
+            override fun onFailure(call: Call<JokeServerModel>, t: Throwable) {
+                val errorType = if (t is UnknownHostException)
+                    ErrorType.NO_CONNECTION
                 else
-                    jokeCloudCallback.fail(ErrorType.SERVICE_UNAVAILABLE)
+                    ErrorType.SERVICE_UNAVAILABLE
+                jokeCloudCallback.fail(errorType)
             }
-        })
+        })*/
     }
 }
 
 class TestCloudDataSource : CloudDataSource {
     private var count = 0
-    override fun getJoke(jokeCloudCallback: JokeCloudCallback) {
+    override suspend fun getJoke(): Result<JokeServerModel, ErrorType> {
         val joke = JokeServerModel(
             count,"TestPunchline$count","TestSetup$count","TestType"
         )
-        jokeCloudCallback.provide(joke)
         count++
+        return Result.Success(joke)
     }
 }
 
 interface JokeCloudCallback {
-    fun provide(joke: JokeServerModel)
+    fun provide(joke: Joke)
     fun fail(error: ErrorType)
 }
 

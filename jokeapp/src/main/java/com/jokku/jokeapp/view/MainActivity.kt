@@ -26,13 +26,13 @@ class MainActivity : AppCompatActivity() {
         imageBtn.visibility = ImageButton.INVISIBLE
 
         viewModel.init(object : DisplayCallback {
-            override fun provideText(text: String) = runOnUiThread {
+            override fun provideText(text: String) {
                 button.isEnabled = true
                 progressBar.visibility = ProgressBar.INVISIBLE
                 textView.text = text
             }
 
-            override fun provideIconRes(id: Int) = runOnUiThread { imageBtn.setImageResource(id) }
+            override fun provideIconRes(id: Int) { imageBtn.setImageResource(id) }
         })
 
         button.setOnClickListener {

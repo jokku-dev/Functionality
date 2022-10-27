@@ -1,40 +1,43 @@
 package com.jokku.jokeapp.data.source
 
-import com.jokku.jokeapp.data.entity.JokeRealm
-import com.jokku.jokeapp.data.entity.JokeServerModel
+import com.jokku.jokeapp.data.entity.JokeRealmModel
 import com.jokku.jokeapp.model.Joke
+import com.jokku.jokeapp.model.JokeUiModel
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 interface CacheDataSource {
-    fun addOrRemove(id: Int, jokeServerModel: JokeServerModel): Joke
-    fun getJoke(jokeCachedCallback: JokeCachedCallback)
+    suspend fun addOrRemove(id: Int, joke: Joke): JokeUiModel
+    suspend fun getJoke(): Result<Joke, Unit>
 }
 
 class BaseCacheDataSource(private val realm: Realm) : CacheDataSource {
-    override fun addOrRemove(id: Int, jokeServerModel: JokeServerModel): Joke {
-        return realm.writeBlocking {
-            val jokeRealm = this.query<JokeRealm>("id == $id", id).first().find()
-            if (jokeRealm == null) {
-                val newJoke = jokeServerModel.toJokeRealm()
-                this.copyToRealm(newJoke)
-                jokeServerModel.toFavoriteJoke()
-            } else {
-                delete(jokeRealm)
-                jokeServerModel.toBaseJoke()
+    override suspend fun addOrRemove(id: Int, joke: Joke): JokeUiModel =
+        withContext(Dispatchers.IO) {
+            realm.writeBlocking {
+                val jokeRealmModel = this.query<JokeRealmModel>("id == $id", id).first().find()
+                if (jokeRealmModel == null) {
+                    val newJoke = joke.toRealmJoke()
+                    this.copyToRealm(newJoke)
+                    joke.toFavoriteJoke()
+                } else {
+                    delete(jokeRealmModel)
+                    joke.toBaseJoke()
+                }
             }
         }
-    }
 
-    override fun getJoke(jokeCachedCallback: JokeCachedCallback) {
-        realm.writeBlocking {
-            val jokes = this.query<JokeRealm>().find()
+    override suspend fun getJoke(): Result<Joke, Unit> {
+        return realm.writeBlocking {
+            val jokes = this.query<JokeRealmModel>().find()
             if (jokes.isEmpty())
-                jokeCachedCallback.fail()
+                Result.Error(Unit)
             else
                 jokes.random().let { joke ->
-                    jokeCachedCallback.provide(
-                        JokeServerModel(
+                    Result.Success(
+                        Joke(
                             joke.id,
                             joke.punchline,
                             joke.setup,
@@ -47,30 +50,30 @@ class BaseCacheDataSource(private val realm: Realm) : CacheDataSource {
 }
 
 class TestCacheDataSource : CacheDataSource {
-    private val list = ArrayList<Pair<Int, JokeServerModel>>()
+    private val list = ArrayList<Pair<Int, Joke>>()
 
-    override fun addOrRemove(id: Int, jokeServerModel: JokeServerModel): Joke {
+    override suspend fun addOrRemove(id: Int, joke: Joke): JokeUiModel {
         val found = list.find { it.first == id }
         return if (found != null) {
-            val joke = found.second.toBaseJoke()
+            val uiModel = found.second.toBaseJoke()
             list.remove(found)
-            joke
+            uiModel
         } else {
-            list.add(Pair(id, jokeServerModel))
-            jokeServerModel.toFavoriteJoke()
+            list.add(Pair(id, joke))
+            joke.toFavoriteJoke()
         }
     }
 
-    override fun getJoke(jokeCachedCallback: JokeCachedCallback) {
-        if (list.isEmpty())
-            jokeCachedCallback.fail()
+    override suspend fun getJoke(): Result<Joke, Unit> {
+        return if (list.isEmpty())
+            Result.Error(Unit)
         else
-            jokeCachedCallback.provide(list.random().second)
+            Result.Success(list.random().second)
 
     }
 }
 
 interface JokeCachedCallback {
-    fun provide(jokeServerModel: JokeServerModel)
+    fun provide(joke: Joke)
     fun fail()
 }

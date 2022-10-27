@@ -1,15 +1,18 @@
 package com.jokku.jokeapp.model
 
 import androidx.annotation.DrawableRes
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.jokku.jokeapp.data.JokeCallback
 import com.jokku.jokeapp.data.Model
+import kotlinx.coroutines.launch
 
-class ViewModel(private val model: Model) {
+class ViewModel(private val model: Model): ViewModel() {
     private var displayCallback: DisplayCallback? = null
     private val jokeCallback = object : JokeCallback {
-        override fun provide(joke: Joke) {
+        override fun provide(jokeUiModel: JokeUiModel) {
             displayCallback?.let {
-                joke.map(it)
+                jokeUiModel.map(it)
             }
         }
     }
@@ -19,16 +22,22 @@ class ViewModel(private val model: Model) {
         model.init(jokeCallback)
     }
 
-    fun getJoke() {
-        model.getJoke()
+    fun getJoke() = viewModelScope.launch {
+        val uiModel = model.getJoke()
+        displayCallback?.let {
+            uiModel.map(it)
+        }
     }
 
     fun chooseFavorites(isFavorite: Boolean) {
         model.chooseDataSource(isFavorite)
     }
 
-    fun changeJokeStatus() {
-        model.changeJokeStatus(jokeCallback)
+    fun changeJokeStatus() = viewModelScope.launch {
+        val uiModel = model.changeJokeStatus()
+        displayCallback?.let {
+            uiModel?.map(it)
+        }
     }
 
     fun clear() {

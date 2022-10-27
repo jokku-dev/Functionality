@@ -1,9 +1,7 @@
 package com.jokku.jokeapp.data.entity
 
 import com.google.gson.annotations.SerializedName
-import com.jokku.jokeapp.data.source.CacheDataSource
-import com.jokku.jokeapp.model.BaseJoke
-import com.jokku.jokeapp.model.FavoriteJoke
+import com.jokku.jokeapp.model.Joke
 
 data class JokeServerModel(
     @SerializedName("id")
@@ -15,18 +13,5 @@ data class JokeServerModel(
     @SerializedName("type")
     val type: String
 ) {
-    fun toBaseJoke() = BaseJoke(setup, punchline)
-
-    fun toFavoriteJoke() = FavoriteJoke(setup, punchline)
-
-    fun toJokeRealm(): JokeRealm {
-      return JokeRealm().also {
-          it.id = id
-          it.setup = setup
-          it.punchline = punchline
-          it.type = type
-      }
-    }
-
-    fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(id,this)
+    fun toJoke() = Joke(id, punchline, setup, type)
 }

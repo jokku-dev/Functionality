@@ -1,28 +1,26 @@
 package com.jokku.jokeapp.model
 
-import androidx.annotation.DrawableRes
-import com.jokku.jokeapp.R
+import com.jokku.jokeapp.data.entity.JokeRealmModel
+import com.jokku.jokeapp.data.source.CacheDataSource
 
-abstract class Joke(private val setup: String, private val punchline: String) {
-    fun map(callback: DisplayCallback) = callback.run {
-        provideText(getComposeJoke())
-        provideIconRes(getIconResId())
+class Joke(
+    private val id: Int,
+    private val punchline: String,
+    private val setup: String,
+    private val type: String
+) {
+    fun toBaseJoke() = BaseJokeUiModel(setup, punchline)
+
+    fun toFavoriteJoke() = FavoriteJokeUiModel(setup, punchline)
+
+    fun toRealmJoke(): JokeRealmModel {
+        return JokeRealmModel().also {
+            it.id = id
+            it.setup = setup
+            it.punchline = punchline
+            it.type = type
+        }
     }
 
-    protected fun getComposeJoke() = "$setup\n$punchline"
-
-    @DrawableRes
-    protected abstract fun getIconResId(): Int
-}
-
-class BaseJoke(setup: String, punchline: String) : Joke(setup, punchline) {
-    override fun getIconResId() = R.drawable.ic_outline_favorite_border_34
-}
-
-class FavoriteJoke(setup: String, punchline: String) : Joke(setup, punchline) {
-    override fun getIconResId() = R.drawable.ic_outline_favorite_34
-}
-
-class FailedJoke(text: String) : Joke(text, "") {
-    override fun getIconResId() = 0
+    suspend fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(id,this)
 }
