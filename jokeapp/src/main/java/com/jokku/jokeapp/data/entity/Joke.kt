@@ -1,7 +1,8 @@
-package com.jokku.jokeapp.model
+package com.jokku.jokeapp.data.entity
 
-import com.jokku.jokeapp.data.entity.JokeRealmModel
 import com.jokku.jokeapp.data.source.CacheDataSource
+import com.jokku.jokeapp.model.BaseJokeUiModel
+import com.jokku.jokeapp.model.FavoriteJokeUiModel
 
 class Joke(
     private val id: Int,

@@ -3,23 +3,14 @@ package com.jokku.jokeapp.model
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jokku.jokeapp.data.JokeCallback
 import com.jokku.jokeapp.data.Model
 import kotlinx.coroutines.launch
 
-class ViewModel(private val model: Model): ViewModel() {
+class JokeViewModel(private val model: Model): ViewModel() {
     private var displayCallback: DisplayCallback? = null
-    private val jokeCallback = object : JokeCallback {
-        override fun provide(jokeUiModel: JokeUiModel) {
-            displayCallback?.let {
-                jokeUiModel.map(it)
-            }
-        }
-    }
 
     fun init(callback: DisplayCallback) {
         displayCallback = callback
-        model.init(jokeCallback)
     }
 
     fun getJoke() = viewModelScope.launch {
@@ -42,7 +33,6 @@ class ViewModel(private val model: Model): ViewModel() {
 
     fun clear() {
         displayCallback = null
-        model.clear()
     }
 }
 
