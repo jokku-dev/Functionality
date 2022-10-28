@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.jokku.functionality'
+    namespace 'com.jokku.images'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.jokku.functionality"
+        applicationId "com.jokku.images"
         minSdk 21
         targetSdk 33
         versionCode 1
@@ -30,6 +30,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 

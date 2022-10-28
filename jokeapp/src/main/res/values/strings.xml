@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Joke App</string>
+    <string name="get_joke">Get Joke</string>
+    <string name="no_connection">No internet connection</string>
+    <string name="service_unavailable">Service is unavailable</string>
+    <string name="show_favorite_joke">Show favorite joke</string>
+    <string name="no_favorite_joke">No favorite jokes! Add one tapping heart icon</string>
+</resources>

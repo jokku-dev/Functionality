@@ -16,3 +16,5 @@ rootProject.name = "Functionality"
 include ':text-quest'
 include ':images'
 include ':fields-and-buttons'
+include ':mvvm-custom'
+include ':jokeapp'
