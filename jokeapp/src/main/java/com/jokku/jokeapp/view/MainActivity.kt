@@ -27,9 +27,10 @@ class MainActivity : AppCompatActivity() {
 
         jokeViewModel.init(object : DisplayCallback {
             override fun provideText(text: String) {
-                button.isEnabled = true
                 progressBar.visibility = ProgressBar.INVISIBLE
                 textView.text = text
+                imageBtn.visibility = ImageButton.VISIBLE
+                button.isEnabled = true
             }
 
             override fun provideIconRes(id: Int) { imageBtn.setImageResource(id) }
@@ -39,7 +40,6 @@ class MainActivity : AppCompatActivity() {
             button.isEnabled = false
             progressBar.visibility = ProgressBar.VISIBLE
             jokeViewModel.getJoke()
-            imageBtn.visibility = ImageButton.VISIBLE
         }
         checkBox.setOnCheckedChangeListener { _, isChecked ->
             jokeViewModel.chooseFavorites(isChecked)

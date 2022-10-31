@@ -1,4 +1,4 @@
-package com.jokku.jokeapp.data.source
+package com.jokku.jokeapp.util
 
 import com.jokku.jokeapp.data.entity.JokeRealmModel
 import io.realm.kotlin.Realm

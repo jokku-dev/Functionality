@@ -1,33 +1,47 @@
 package com.jokku.jokeapp
 
-import com.jokku.jokeapp.data.BaseModel
+import com.jokku.jokeapp.data.*
 import com.jokku.jokeapp.data.entity.Joke
 import com.jokku.jokeapp.data.entity.JokeServerModel
-import com.jokku.jokeapp.data.source.CacheDataSource
-import com.jokku.jokeapp.data.source.CloudDataSource
-import com.jokku.jokeapp.data.source.ErrorType
-import com.jokku.jokeapp.data.source.Result
-import com.jokku.jokeapp.model.BaseJokeUiModel
-import com.jokku.jokeapp.model.JokeUiModel
+import com.jokku.jokeapp.data.source.*
+import com.jokku.jokeapp.model.*
 import com.jokku.jokeapp.util.ResourceManager
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class BaseModelTest {
 
     @Test
-    fun test_change_data_source(): Unit = runBlocking {
-        val cacheDataSource = TestCacheDataSource()
-        val cloudDataSource = TestCloudDataSource()
-        val model = BaseModel(cacheDataSource, cloudDataSource, TestResourceManager())
+    fun test_change_joke_status(): Unit = runBlocking {
+        val testCacheDataSource = TestCacheDataSource()
+        val testCloudDataSource = TestCloudDataSource()
+        val cachedJoke = BaseCachedJoke()
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://www.google.com")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val cacheResultHandler = CacheResultHandler(
+            cachedJoke,
+            testCacheDataSource,
+            NoCachedJokes(TestResourceManager())
+        )
+        val cloudResultHandler = CloudResultHandler(
+            cachedJoke,
+            BaseCloudDataSource(retrofit.create(JokeService::class.java)),
+            NoConnection(TestResourceManager()),
+            ServiceUnavailable(TestResourceManager())
+        )
+        val model = BaseModel(testCacheDataSource, cacheResultHandler, cloudResultHandler, cachedJoke)
         model.chooseDataSource(false)
-        cloudDataSource.getJokeWithResult(true)
+        testCloudDataSource.getJokeWithResult(true)
         val joke = model.getJoke()
         assertEquals(joke is BaseJokeUiModel, true)
         model.changeJokeStatus()
-        assertEquals(cacheDataSource.checkContainsId(0), true)
+        assertEquals(testCacheDataSource.checkContainsId(0), true)
     }
 
     private inner class TestCacheDataSource : CacheDataSource {
@@ -40,16 +54,16 @@ class BaseModelTest {
             nextJokeIdToGet = id
         }
 
-        fun checkContainsId(id: Int) = map.containsKey(id)
+        fun checkContainsId(id: Int) = map.isNotEmpty()
 
         override suspend fun addOrRemove(id: Int, joke: Joke): JokeUiModel {
             return if (map.containsKey(id)) {
-                val uiModel = map[id]!!.toBaseJoke()
+                val uiModel = map[id]!!.toBaseUiJoke()
                 map.remove(id)
                 uiModel
             } else {
                 map[id] = joke
-                joke.toFavoriteJoke()
+                joke.toFavoriteUiJoke()
             }
         }
 

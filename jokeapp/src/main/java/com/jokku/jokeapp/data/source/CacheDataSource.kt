@@ -1,13 +1,16 @@
 package com.jokku.jokeapp.data.source
 
+import com.jokku.jokeapp.data.Result
 import com.jokku.jokeapp.data.entity.Joke
 import com.jokku.jokeapp.data.entity.JokeRealmModel
 import com.jokku.jokeapp.model.JokeUiModel
+import com.jokku.jokeapp.util.RealmProvider
 import io.realm.kotlin.ext.query
 
-interface CacheDataSource {
+interface CacheDataSource : JokeDataFetcher<Joke, Unit>, ChangeJokeStatus
+
+interface ChangeJokeStatus {
     suspend fun addOrRemove(id: Int, joke: Joke): JokeUiModel
-    suspend fun getJoke(): Result<Joke, Unit>
 }
 
 class BaseCacheDataSource(private val realmProvider: RealmProvider) : CacheDataSource {
@@ -16,10 +19,10 @@ class BaseCacheDataSource(private val realmProvider: RealmProvider) : CacheDataS
         if (jokeRealmModel == null) {
             val newJoke = joke.toRealmJoke()
             this.copyToRealm(newJoke)
-            joke.toFavoriteJoke()
+            joke.toFavoriteUiJoke()
         } else {
             delete(jokeRealmModel)
-            joke.toBaseJoke()
+            joke.toBaseUiJoke()
         }
     }
 
