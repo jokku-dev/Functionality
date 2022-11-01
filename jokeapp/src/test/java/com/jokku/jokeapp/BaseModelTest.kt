@@ -41,7 +41,7 @@ class BaseModelTest {
         val joke = model.getJoke()
         assertEquals(joke is BaseJokeUiModel, true)
         model.changeJokeStatus()
-        assertEquals(testCacheDataSource.checkContainsId(0), true)
+        assertEquals(testCacheDataSource.checkIsNotEmpty(), true)
     }
 
     private inner class TestCacheDataSource : CacheDataSource {
@@ -54,7 +54,7 @@ class BaseModelTest {
             nextJokeIdToGet = id
         }
 
-        fun checkContainsId(id: Int) = map.isNotEmpty()
+        fun checkIsNotEmpty() = map.isNotEmpty()
 
         override suspend fun addOrRemove(id: Int, joke: Joke): JokeUiModel {
             return if (map.containsKey(id)) {

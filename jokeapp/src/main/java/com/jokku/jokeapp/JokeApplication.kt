@@ -8,21 +8,17 @@ import com.jokku.jokeapp.data.CloudResultHandler
 import com.jokku.jokeapp.data.source.BaseCacheDataSource
 import com.jokku.jokeapp.data.source.BaseCloudDataSource
 import com.jokku.jokeapp.data.source.JokeService
-import com.jokku.jokeapp.model.JokeViewModel
-import com.jokku.jokeapp.model.NoCachedJokes
-import com.jokku.jokeapp.model.NoConnection
-import com.jokku.jokeapp.model.ServiceUnavailable
+import com.jokku.jokeapp.model.*
 import com.jokku.jokeapp.util.BaseRealmProvider
 import com.jokku.jokeapp.util.BaseResourceManager
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class JokeApplication : Application() {
-    lateinit var jokeViewModel: JokeViewModel
+    lateinit var mainViewModel: MainViewModel
 
     override fun onCreate() {
         super.onCreate()
-
         val retrofit = Retrofit.Builder()
             .baseUrl("https://www.google.com")
             .addConverterFactory(GsonConverterFactory.create())
@@ -30,7 +26,7 @@ class JokeApplication : Application() {
         val cachedJoke = BaseCachedJoke()
         val cacheDataSource = BaseCacheDataSource(BaseRealmProvider())
         val resourceManager = BaseResourceManager(this)
-        jokeViewModel = JokeViewModel(
+        mainViewModel = MainViewModel(
             BaseModel(
                 cacheDataSource,
                 CacheResultHandler(
@@ -45,7 +41,8 @@ class JokeApplication : Application() {
                     ServiceUnavailable(resourceManager)
                 ),
                 cachedJoke
-            )
+            ),
+            BaseCommunicator()
         )
     }
 }

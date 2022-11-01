@@ -4,10 +4,7 @@ import androidx.annotation.DrawableRes
 import com.jokku.jokeapp.R
 
 abstract class JokeUiModel(private val setup: String, private val punchline: String) {
-    fun map(callback: DisplayCallback) = callback.run {
-        provideText(getComposeJoke())
-        provideIconRes(getIconResId())
-    }
+    fun getData() = Pair(getComposeJoke(), getIconResId())
 
     private fun getComposeJoke() = "$setup\n$punchline"
 
