@@ -1,4 +1,4 @@
-package com.jokku.jokeapp.model
+package com.jokku.jokeapp.presentation.model
 
 import com.jokku.jokeapp.R
 import com.jokku.jokeapp.util.ResourceManager
@@ -17,4 +17,8 @@ class ServiceUnavailable(private val resourceManager: ResourceManager) : JokeFai
 
 class NoCachedJokes(private val resourceManager: ResourceManager) : JokeFailure {
     override fun getMessage() = resourceManager.getString(R.string.no_favorite_joke)
+}
+
+class GenericError(private val resourceManager: ResourceManager) : JokeFailure {
+    override fun getMessage() = resourceManager.getString(R.string.generic_fail_message)
 }

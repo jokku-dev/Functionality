@@ -1,27 +1,22 @@
 package com.jokku.jokeapp.data.source
 
-import com.jokku.jokeapp.data.Result
-import com.jokku.jokeapp.data.entity.JokeServerModel
+import com.jokku.jokeapp.data.entity.JokeDataModel
+import com.jokku.jokeapp.domain.NoConnectionException
+import com.jokku.jokeapp.domain.ServiceUnavailableException
 import java.net.UnknownHostException
 
-interface CloudDataSource : JokeDataFetcher<JokeServerModel, ErrorType>
+interface CloudDataSource : JokeDataFetcher
 
 class BaseCloudDataSource(private val service: JokeService) : CloudDataSource {
-    override suspend fun getJoke() : Result<JokeServerModel, ErrorType> {
-        return try {
-            val result: JokeServerModel = service.getJoke().execute().body()!!
-            Result.Success(result)
+    override suspend fun getJoke() : JokeDataModel {
+        try {
+            return service.getJoke().execute().body()!!.map()
         } catch (e: Exception) {
-            val errorType = if (e is UnknownHostException)
-                ErrorType.NO_CONNECTION
-            else
-                ErrorType.SERVICE_UNAVAILABLE
-            Result.Error(errorType)
+            if (e is UnknownHostException) { //low-level exception
+                throw NoConnectionException() //high level exceptions
+            } else {
+                throw ServiceUnavailableException()
+            }
         }
     }
-}
-
-enum class ErrorType {
-    NO_CONNECTION,
-    SERVICE_UNAVAILABLE
 }

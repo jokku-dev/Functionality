@@ -1,24 +1,35 @@
 package com.jokku.jokeapp.data
 
-import com.jokku.jokeapp.data.entity.ChangeJoke
-import com.jokku.jokeapp.data.entity.Joke
-import com.jokku.jokeapp.data.source.ChangeJokeStatus
-import com.jokku.jokeapp.model.JokeUiModel
+import com.jokku.jokeapp.data.entity.JokeDataModel
+import com.jokku.jokeapp.data.source.JokeStatusChanger
 
-interface CachedJoke : ChangeJoke {
-    fun saveJoke(joke: Joke)
+interface CachedJoke : JokeChanger {
+    fun saveJoke(jokeDataModel: JokeDataModel)
     fun clear()
 }
 
+interface JokeChanger {
+    suspend fun changeModelType(jokeStatusChanger: JokeStatusChanger): JokeDataModel
+
+    class Empty : JokeChanger {
+        override suspend fun changeModelType(jokeStatusChanger: JokeStatusChanger): JokeDataModel {
+            throw IllegalStateException("empty joke called")
+        }
+    }
+}
+
 class BaseCachedJoke : CachedJoke {
-    private var cached: Joke? = null
-    override suspend fun change(changeJokeStatus: ChangeJokeStatus): JokeUiModel? {
-        return cached?.change(changeJokeStatus)
+    private var cached: JokeChanger = JokeChanger.Empty()
+
+    override fun saveJoke(jokeDataModel: JokeDataModel) {
+        cached = jokeDataModel
     }
-    override fun saveJoke(joke: Joke) {
-        cached = joke
-    }
+
     override fun clear() {
-        cached = null
+        cached = JokeChanger.Empty()
+    }
+
+    override suspend fun changeModelType(jokeStatusChanger: JokeStatusChanger): JokeDataModel {
+        return cached.changeModelType(jokeStatusChanger)
     }
 }

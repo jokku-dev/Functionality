@@ -5,4 +5,5 @@
     <string name="service_unavailable">Service is unavailable</string>
     <string name="show_favorite_joke">Show favorite joke</string>
     <string name="no_favorite_joke">No favorite jokes! Add one tapping heart icon</string>
+    <string name="generic_fail_message">Unknown error</string>
 </resources>

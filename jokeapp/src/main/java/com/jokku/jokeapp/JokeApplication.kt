@@ -2,14 +2,15 @@ package com.jokku.jokeapp
 
 import android.app.Application
 import com.jokku.jokeapp.data.BaseCachedJoke
-import com.jokku.jokeapp.data.BaseModel
-import com.jokku.jokeapp.data.CacheResultHandler
-import com.jokku.jokeapp.data.CloudResultHandler
+import com.jokku.jokeapp.data.BaseJokeRepository
+import com.jokku.jokeapp.data.BaseRealmProvider
 import com.jokku.jokeapp.data.source.BaseCacheDataSource
 import com.jokku.jokeapp.data.source.BaseCloudDataSource
 import com.jokku.jokeapp.data.source.JokeService
-import com.jokku.jokeapp.model.*
-import com.jokku.jokeapp.util.BaseRealmProvider
+import com.jokku.jokeapp.domain.BaseJokeInteractor
+import com.jokku.jokeapp.domain.JokeFailureFactory
+import com.jokku.jokeapp.presentation.model.BaseCommunicator
+import com.jokku.jokeapp.presentation.model.MainViewModel
 import com.jokku.jokeapp.util.BaseResourceManager
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,26 +24,12 @@ class JokeApplication : Application() {
             .baseUrl("https://www.google.com")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        val cachedJoke = BaseCachedJoke()
         val cacheDataSource = BaseCacheDataSource(BaseRealmProvider())
         val resourceManager = BaseResourceManager(this)
-        mainViewModel = MainViewModel(
-            BaseModel(
-                cacheDataSource,
-                CacheResultHandler(
-                    cachedJoke,
-                    cacheDataSource,
-                    NoCachedJokes(resourceManager)
-                ),
-                CloudResultHandler(
-                    cachedJoke,
-                    BaseCloudDataSource(retrofit.create(JokeService::class.java)),
-                    NoConnection(resourceManager),
-                    ServiceUnavailable(resourceManager)
-                ),
-                cachedJoke
-            ),
-            BaseCommunicator()
-        )
+        val cloudDataSource = BaseCloudDataSource(retrofit.create(JokeService::class.java))
+        val repository = BaseJokeRepository(cacheDataSource, cloudDataSource, BaseCachedJoke())
+        val interactor = BaseJokeInteractor(repository, JokeFailureFactory(resourceManager))
+
+        mainViewModel = MainViewModel(interactor, BaseCommunicator())
     }
 }
