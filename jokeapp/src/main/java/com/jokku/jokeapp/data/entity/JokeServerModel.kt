@@ -12,7 +12,9 @@ data class JokeServerModel(
     val setup: String,
     @SerializedName("type")
     val type: String
-) : Mapper<JokeDataModel> {
+) {
 
-    override fun map() = JokeDataModel(id, setup, punchline)
+    fun <T> map(mapper: Mapper<T>): T {
+        return mapper.map(id, setup, punchline, false)
+    }
 }

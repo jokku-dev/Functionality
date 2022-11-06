@@ -1,5 +1,6 @@
 package com.jokku.jokeapp.domain
 
+import com.jokku.jokeapp.core.Mapper
 import com.jokku.jokeapp.data.JokeRepository
 
 interface JokeInteractor {
@@ -10,23 +11,23 @@ interface JokeInteractor {
 
 class BaseJokeInteractor(
     private val repository: JokeRepository,
-    private val jokeFailureHandler: JokeFailureHandler
+    private val failureHandler: JokeFailureHandler,
+    private val mapper: Mapper<Joke.Success>
 ) : JokeInteractor {
 
     override suspend fun getJoke(): Joke {
         return try {
-            Joke.Success(repository.getJoke().setup, repository.getJoke().punchline, false)
+            repository.getJoke().map(mapper)
         } catch (e: Exception) {
-            Joke.Failed(jokeFailureHandler.handle(e))
+            Joke.Failed(failureHandler.handle(e))
         }
     }
 
     override suspend fun changeFavorites(): Joke {
         return try {
-            val joke = repository.changeJokeStatus()
-            Joke.Success(joke.setup, joke.punchline, joke.cached)
+            repository.changeJokeStatus().map(mapper)
         } catch (e: Exception) {
-            Joke.Failed(jokeFailureHandler.handle(e))
+            Joke.Failed(failureHandler.handle(e))
         }
     }
 

@@ -1,9 +1,10 @@
 package com.jokku.jokeapp
 
 import android.app.Application
-import com.jokku.jokeapp.data.BaseCachedJoke
-import com.jokku.jokeapp.data.BaseJokeRepository
-import com.jokku.jokeapp.data.BaseRealmProvider
+import com.jokku.jokeapp.core.DataModelMapper
+import com.jokku.jokeapp.core.RealmMapper
+import com.jokku.jokeapp.core.SuccessMapper
+import com.jokku.jokeapp.data.*
 import com.jokku.jokeapp.data.source.BaseCacheDataSource
 import com.jokku.jokeapp.data.source.BaseCloudDataSource
 import com.jokku.jokeapp.data.source.JokeService
@@ -24,11 +25,14 @@ class JokeApplication : Application() {
             .baseUrl("https://www.google.com")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        val cacheDataSource = BaseCacheDataSource(BaseRealmProvider())
+        val cacheDataSource =
+            BaseCacheDataSource(BaseRealmProvider(), RealmMapper(), DataModelMapper())
+        val cloudDataSource =
+            BaseCloudDataSource(retrofit.create(JokeService::class.java), DataModelMapper())
         val resourceManager = BaseResourceManager(this)
-        val cloudDataSource = BaseCloudDataSource(retrofit.create(JokeService::class.java))
         val repository = BaseJokeRepository(cacheDataSource, cloudDataSource, BaseCachedJoke())
-        val interactor = BaseJokeInteractor(repository, JokeFailureFactory(resourceManager))
+        val interactor =
+            BaseJokeInteractor(repository, JokeFailureFactory(resourceManager), SuccessMapper())
 
         mainViewModel = MainViewModel(interactor, BaseCommunicator())
     }

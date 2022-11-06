@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     private val interactor: JokeInteractor,
     private val communicator: Communicator, //for testing purpose
-    private val dispatcher: CoroutineDispatcher = Dispatchers.Main //for testing purpose
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Main, //for testing purpose
 ) : ViewModel() {
 
     @SuppressLint("SuspiciousIndentation")

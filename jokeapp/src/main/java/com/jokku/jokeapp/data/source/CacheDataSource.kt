@@ -1,5 +1,6 @@
 package com.jokku.jokeapp.data.source
 
+import com.jokku.jokeapp.core.Mapper
 import com.jokku.jokeapp.data.RealmProvider
 import com.jokku.jokeapp.data.entity.JokeDataModel
 import com.jokku.jokeapp.data.entity.JokeRealmModel
@@ -12,12 +13,17 @@ interface JokeStatusChanger {
     suspend fun addOrRemove(id: Int, joke: JokeDataModel): JokeDataModel
 }
 
-class BaseCacheDataSource(private val realmProvider: RealmProvider) : CacheDataSource {
+class BaseCacheDataSource(
+    private val realmProvider: RealmProvider,
+    private val realmMapper: Mapper<JokeRealmModel>,
+    private val dataMapper: Mapper<JokeDataModel>
+    ) : CacheDataSource {
+
     override suspend fun addOrRemove(id: Int, joke: JokeDataModel): JokeDataModel =
         realmProvider.provide().writeBlocking {
             val jokeRealmModel = this.query<JokeRealmModel>("id == $id", id).first().find()
             if (jokeRealmModel == null) {
-                val newJoke = joke.toRealm()
+                val newJoke = joke.map(realmMapper)
                 this.copyToRealm(newJoke)
                 joke.changeCached(true)
             } else {
@@ -29,6 +35,6 @@ class BaseCacheDataSource(private val realmProvider: RealmProvider) : CacheDataS
     override suspend fun getJoke(): JokeDataModel = realmProvider.provide().writeBlocking {
         val jokes = this.query<JokeRealmModel>().find()
         if (jokes.isEmpty()) throw NoCachedJokesException()
-        else jokes.random().map()
+        else jokes.random().map(dataMapper)
     }
 }
