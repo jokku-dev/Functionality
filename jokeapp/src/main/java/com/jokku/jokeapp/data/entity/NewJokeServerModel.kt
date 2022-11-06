@@ -3,15 +3,13 @@ package com.jokku.jokeapp.data.entity
 import com.google.gson.annotations.SerializedName
 import com.jokku.jokeapp.core.Mapper
 
-data class JokeServerModel(
+class NewJokeServerModel(
     @SerializedName("id")
-    val id: Int,
-    @SerializedName("punchline")
-    val punchline: String,
+    private val id: Int,
     @SerializedName("setup")
-    val setup: String,
-    @SerializedName("type")
-    val type: String
+    private val setup: String,
+    @SerializedName("delivery")
+    private val punchline: String
 ) : Mapper<JokeDataModel> {
 
     override fun map() = JokeDataModel(id, setup, punchline)

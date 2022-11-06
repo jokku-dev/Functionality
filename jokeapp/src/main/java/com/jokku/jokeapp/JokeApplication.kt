@@ -4,10 +4,12 @@ import android.app.Application
 import com.jokku.jokeapp.core.DataModelMapper
 import com.jokku.jokeapp.core.RealmMapper
 import com.jokku.jokeapp.core.SuccessMapper
-import com.jokku.jokeapp.data.*
+import com.jokku.jokeapp.data.BaseCachedJoke
+import com.jokku.jokeapp.data.BaseJokeRepository
+import com.jokku.jokeapp.data.BaseRealmProvider
 import com.jokku.jokeapp.data.source.BaseCacheDataSource
-import com.jokku.jokeapp.data.source.BaseCloudDataSource
-import com.jokku.jokeapp.data.source.JokeService
+import com.jokku.jokeapp.data.source.NewJokeCloudDataSource
+import com.jokku.jokeapp.data.source.NewJokeService
 import com.jokku.jokeapp.domain.BaseJokeInteractor
 import com.jokku.jokeapp.domain.JokeFailureFactory
 import com.jokku.jokeapp.presentation.model.BaseCommunicator
@@ -28,7 +30,7 @@ class JokeApplication : Application() {
         val cacheDataSource =
             BaseCacheDataSource(BaseRealmProvider(), RealmMapper(), DataModelMapper())
         val cloudDataSource =
-            BaseCloudDataSource(retrofit.create(JokeService::class.java), DataModelMapper())
+            NewJokeCloudDataSource(retrofit.create(NewJokeService::class.java))
         val resourceManager = BaseResourceManager(this)
         val repository = BaseJokeRepository(cacheDataSource, cloudDataSource, BaseCachedJoke())
         val interactor =

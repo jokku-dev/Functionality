@@ -1,6 +1,6 @@
 package com.jokku.jokeapp.data.source
 
-import com.jokku.jokeapp.core.Mapper
+import com.jokku.jokeapp.core.JokeMapper
 import com.jokku.jokeapp.data.RealmProvider
 import com.jokku.jokeapp.data.entity.JokeDataModel
 import com.jokku.jokeapp.data.entity.JokeRealmModel
@@ -15,8 +15,8 @@ interface JokeStatusChanger {
 
 class BaseCacheDataSource(
     private val realmProvider: RealmProvider,
-    private val realmMapper: Mapper<JokeRealmModel>,
-    private val dataMapper: Mapper<JokeDataModel>
+    private val realmMapper: JokeMapper<JokeRealmModel>,
+    private val dataMapper: JokeMapper<JokeDataModel>
     ) : CacheDataSource {
 
     override suspend fun addOrRemove(id: Int, joke: JokeDataModel): JokeDataModel =

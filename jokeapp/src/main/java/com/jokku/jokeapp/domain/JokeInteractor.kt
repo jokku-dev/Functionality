@@ -1,6 +1,6 @@
 package com.jokku.jokeapp.domain
 
-import com.jokku.jokeapp.core.Mapper
+import com.jokku.jokeapp.core.JokeMapper
 import com.jokku.jokeapp.data.JokeRepository
 
 interface JokeInteractor {
@@ -12,7 +12,7 @@ interface JokeInteractor {
 class BaseJokeInteractor(
     private val repository: JokeRepository,
     private val failureHandler: JokeFailureHandler,
-    private val mapper: Mapper<Joke.Success>
+    private val mapper: JokeMapper<Joke.Success>
 ) : JokeInteractor {
 
     override suspend fun getJoke(): Joke {

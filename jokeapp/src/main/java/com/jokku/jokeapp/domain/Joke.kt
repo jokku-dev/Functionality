@@ -1,9 +1,9 @@
 package com.jokku.jokeapp.domain
 
+import com.jokku.jokeapp.core.Mapper
 import com.jokku.jokeapp.presentation.model.*
 
-sealed class Joke {
-    abstract fun map(): JokeUiModel
+sealed class Joke : Mapper<JokeUiModel> {
 
     class Success(
         private val setup: String,

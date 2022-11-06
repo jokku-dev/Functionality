@@ -1,7 +1,7 @@
 package com.jokku.jokeapp.data.entity
 
+import com.jokku.jokeapp.core.JokeMapper
 import com.jokku.jokeapp.data.JokeChanger
-import com.jokku.jokeapp.core.Mapper
 import com.jokku.jokeapp.data.source.JokeStatusChanger
 
 class JokeDataModel(
@@ -14,7 +14,7 @@ class JokeDataModel(
     override suspend fun changeModelType(jokeStatusChanger: JokeStatusChanger): JokeDataModel {
         return jokeStatusChanger.addOrRemove(id, this)
     }
-    fun <T> map(mapper: Mapper<T>): T {
+    fun <T> map(mapper: JokeMapper<T>): T {
         return mapper.map(id, setup, punchline, cached)
     }
 
