@@ -1,9 +1,8 @@
-package com.jokku.jokeapp.data.source
+package com.jokku.jokeapp.data.cache
 
 import com.jokku.jokeapp.core.JokeMapper
-import com.jokku.jokeapp.data.RealmProvider
-import com.jokku.jokeapp.data.entity.JokeDataModel
-import com.jokku.jokeapp.data.entity.JokeRealmModel
+import com.jokku.jokeapp.data.JokeDataModel
+import com.jokku.jokeapp.data.JokeDataFetcher
 import com.jokku.jokeapp.domain.NoCachedJokesException
 import io.realm.kotlin.ext.query
 

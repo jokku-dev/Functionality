@@ -1,21 +1,9 @@
 package com.jokku.jokeapp
 
-import com.jokku.jokeapp.data.*
-import com.jokku.jokeapp.data.entity.Joke
-import com.jokku.jokeapp.data.entity.JokeServerModel
-import com.jokku.jokeapp.data.source.*
-import com.jokku.jokeapp.model.*
-import com.jokku.jokeapp.util.ResourceManager
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Test
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
+class BaseJokeRepositoryTest {
 
-class BaseModelTest {
-
-    @Test
+/*    @Test
     fun test_change_joke_status(): Unit = runBlocking {
         val testCacheDataSource = TestCacheDataSource()
         val testCloudDataSource = TestCloudDataSource()
@@ -35,7 +23,7 @@ class BaseModelTest {
             NoConnection(TestResourceManager()),
             ServiceUnavailable(TestResourceManager())
         )
-        val model = BaseModel(testCacheDataSource, cacheResultHandler, cloudResultHandler, cachedJoke)
+        val model = BaseJokeRepository(testCacheDataSource, cacheResultHandler, cloudResultHandler, cachedJoke)
         model.chooseDataSource(false)
         testCloudDataSource.getJokeWithResult(true)
         val joke = model.getJoke()
@@ -100,5 +88,5 @@ class BaseModelTest {
         val message: String = ""
 
         override fun getString(stringResId: Int) = message
-    }
+    }*/
 }

@@ -1,7 +1,7 @@
-package com.jokku.jokeapp.presentation.model
+package com.jokku.jokeapp.presentation
 
 import com.jokku.jokeapp.R
-import com.jokku.jokeapp.util.ResourceManager
+import com.jokku.jokeapp.ResourceManager
 
 interface JokeFailure {
     fun getMessage(): String

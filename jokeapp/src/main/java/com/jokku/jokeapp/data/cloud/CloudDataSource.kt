@@ -1,9 +1,8 @@
-package com.jokku.jokeapp.data.source
+package com.jokku.jokeapp.data.cloud
 
 import com.jokku.jokeapp.core.Mapper
-import com.jokku.jokeapp.data.entity.JokeDataModel
-import com.jokku.jokeapp.data.entity.JokeServerModel
-import com.jokku.jokeapp.data.entity.NewJokeServerModel
+import com.jokku.jokeapp.data.JokeDataFetcher
+import com.jokku.jokeapp.data.JokeDataModel
 import com.jokku.jokeapp.domain.NoConnectionException
 import com.jokku.jokeapp.domain.ServiceUnavailableException
 import retrofit2.Call

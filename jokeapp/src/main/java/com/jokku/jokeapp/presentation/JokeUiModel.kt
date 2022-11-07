@@ -1,4 +1,4 @@
-package com.jokku.jokeapp.presentation.model
+package com.jokku.jokeapp.presentation
 
 import androidx.annotation.DrawableRes
 import com.jokku.jokeapp.R

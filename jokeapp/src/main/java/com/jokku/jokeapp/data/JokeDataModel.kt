@@ -1,8 +1,8 @@
-package com.jokku.jokeapp.data.entity
+package com.jokku.jokeapp.data
 
 import com.jokku.jokeapp.core.JokeMapper
-import com.jokku.jokeapp.data.JokeChanger
-import com.jokku.jokeapp.data.source.JokeStatusChanger
+import com.jokku.jokeapp.data.cache.JokeChanger
+import com.jokku.jokeapp.data.cache.JokeStatusChanger
 
 class JokeDataModel(
     private val id: Int,

@@ -1,9 +1,8 @@
 package com.jokku.jokeapp.data
 
-import com.jokku.jokeapp.data.entity.JokeDataModel
-import com.jokku.jokeapp.data.source.CacheDataSource
-import com.jokku.jokeapp.data.source.CloudDataSource
-import com.jokku.jokeapp.data.source.JokeDataFetcher
+import com.jokku.jokeapp.data.cache.CacheDataSource
+import com.jokku.jokeapp.data.cache.CachedJoke
+import com.jokku.jokeapp.data.cloud.CloudDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -1,7 +1,7 @@
 package com.jokku.jokeapp.domain
 
-import com.jokku.jokeapp.presentation.model.*
-import com.jokku.jokeapp.util.ResourceManager
+import com.jokku.jokeapp.ResourceManager
+import com.jokku.jokeapp.presentation.*
 
 interface JokeFailureHandler {
     fun handle(e: Exception): JokeFailure

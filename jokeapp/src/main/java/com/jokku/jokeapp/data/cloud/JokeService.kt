@@ -1,7 +1,5 @@
-package com.jokku.jokeapp.data.source
+package com.jokku.jokeapp.data.cloud
 
-import com.jokku.jokeapp.data.entity.JokeServerModel
-import com.jokku.jokeapp.data.entity.NewJokeServerModel
 import retrofit2.Call
 import retrofit2.http.GET
 

@@ -1,7 +1,7 @@
 package com.jokku.jokeapp.domain
 
 import com.jokku.jokeapp.core.Mapper
-import com.jokku.jokeapp.presentation.model.*
+import com.jokku.jokeapp.presentation.*
 
 sealed class Joke : Mapper<JokeUiModel> {
 

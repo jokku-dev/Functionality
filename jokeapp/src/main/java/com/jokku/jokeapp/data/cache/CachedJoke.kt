@@ -1,7 +1,6 @@
-package com.jokku.jokeapp.data
+package com.jokku.jokeapp.data.cache
 
-import com.jokku.jokeapp.data.entity.JokeDataModel
-import com.jokku.jokeapp.data.source.JokeStatusChanger
+import com.jokku.jokeapp.data.JokeDataModel
 
 interface CachedJoke : JokeChanger {
     fun saveJoke(jokeDataModel: JokeDataModel)

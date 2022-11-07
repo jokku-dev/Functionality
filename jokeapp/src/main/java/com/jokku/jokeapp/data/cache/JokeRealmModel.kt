@@ -1,4 +1,4 @@
-package com.jokku.jokeapp.data.entity
+package com.jokku.jokeapp.data.cache
 
 import com.jokku.jokeapp.core.JokeMapper
 import io.realm.kotlin.types.RealmObject

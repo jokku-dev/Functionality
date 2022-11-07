@@ -1,6 +1,5 @@
-package com.jokku.jokeapp.data
+package com.jokku.jokeapp.data.cache
 
-import com.jokku.jokeapp.data.entity.JokeRealmModel
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 

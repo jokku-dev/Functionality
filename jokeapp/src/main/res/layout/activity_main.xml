@@ -1,73 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_view_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".presentation.MainActivity">
 
-    <LinearLayout
+    <com.jokku.jokeapp.presentation.FavoriteDataView
+        android:id="@+id/jokeDataView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        custom:actionButtonText="@string/get_joke"
+        custom:checkBoxText="@string/show_favorite_joke"/>
 
-        <com.jokku.jokeapp.presentation.CorrectTextView
-            android:id="@+id/joke_tv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="20sp"
-            tools:text="Loooooooooooooooooooooooong text" />
-
-        <com.jokku.jokeapp.presentation.CorrectImageButton
-            android:id="@+id/favorite_ib"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="10"
-            android:background="?selectableItemBackground"
-            android:visibility="invisible"
-            app:srcCompat="@drawable/ic_outline_favorite_border_34" />
-    </LinearLayout>
-
-
-    <com.jokku.jokeapp.presentation.CorrectButton
-        android:id="@+id/joke_btn"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="32dp"
-        android:text="@string/get_joke" />
-
-    <CheckBox
-        android:id="@+id/favourite_joke_cb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:buttonTint="@color/purple_500"
-        android:text="@string/show_favorite_joke" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_weight="0.2" />
-
-    <com.jokku.jokeapp.presentation.CorrectProgressBar
-        android:id="@+id/progress_bar"
-        style="?android:attr/progressBarStyleHorizontal"
+    <com.jokku.jokeapp.presentation.FavoriteDataView
+        android:id="@+id/quoteDataView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:indeterminateTint="@color/purple_500"
-        android:visibility="invisible" />
-
+        custom:actionButtonText="@string/get_quote"
+        custom:checkBoxText="@string/show_favorite_quote"/>
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.jokku.jokeapp.presentation.model
+package com.jokku.jokeapp.presentation
 
 import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes

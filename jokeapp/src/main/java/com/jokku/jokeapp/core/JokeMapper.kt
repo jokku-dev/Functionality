@@ -1,7 +1,7 @@
 package com.jokku.jokeapp.core
 
-import com.jokku.jokeapp.data.entity.JokeDataModel
-import com.jokku.jokeapp.data.entity.JokeRealmModel
+import com.jokku.jokeapp.data.JokeDataModel
+import com.jokku.jokeapp.data.cache.JokeRealmModel
 import com.jokku.jokeapp.domain.Joke
 
 interface JokeMapper<T> {

@@ -1,4 +1,4 @@
-package com.jokku.jokeapp.presentation.model
+package com.jokku.jokeapp.presentation
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
