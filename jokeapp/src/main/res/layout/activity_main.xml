@@ -8,14 +8,14 @@
     android:orientation="vertical"
     tools:context=".presentation.MainActivity">
 
-    <com.jokku.jokeapp.presentation.FavoriteDataView
+    <com.jokku.jokeapp.presentation.FunDataView
         android:id="@+id/jokeDataView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         custom:actionButtonText="@string/get_joke"
         custom:checkBoxText="@string/show_favorite_joke"/>
 
-    <com.jokku.jokeapp.presentation.FavoriteDataView
+    <com.jokku.jokeapp.presentation.FunDataView
         android:id="@+id/quoteDataView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

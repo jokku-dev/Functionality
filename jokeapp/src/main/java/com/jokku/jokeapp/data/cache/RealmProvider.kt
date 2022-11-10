@@ -8,5 +8,5 @@ interface RealmProvider {
 }
 
 class BaseRealmProvider : RealmProvider {
-    override fun provide(): Realm = Realm.open(RealmConfiguration.create(setOf(JokeRealmModel::class)))
+    override fun provide(): Realm = Realm.open(RealmConfiguration.create(setOf(RealmModel::class)))
 }

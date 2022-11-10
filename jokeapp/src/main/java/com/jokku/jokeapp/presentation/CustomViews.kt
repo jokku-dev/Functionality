@@ -8,7 +8,7 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isVisible
 
-class CorrectButton : AppCompatButton, EnableBtn {
+class CorrectButton : AppCompatButton, BtnEnabler {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
@@ -22,7 +22,7 @@ class CorrectButton : AppCompatButton, EnableBtn {
     }
 }
 
-class CorrectImageButton : AppCompatImageButton, SetImage {
+class CorrectImageButton : AppCompatImageButton, ImageSetter {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
@@ -40,7 +40,7 @@ class CorrectImageButton : AppCompatImageButton, SetImage {
     }
 }
 
-class CorrectTextView : AppCompatTextView, SetText {
+class CorrectTextView : AppCompatTextView, TextSetter {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
@@ -54,7 +54,7 @@ class CorrectTextView : AppCompatTextView, SetText {
     }
 }
 
-class CorrectProgressBar : ProgressBar, ShowBar {
+class CorrectProgressBar : ProgressBar, BarShow {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(

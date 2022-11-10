@@ -7,7 +7,7 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import com.jokku.jokeapp.R
 
-class FavoriteDataView : LinearLayout {
+class FunDataView : LinearLayout {
     private val textView: CorrectTextView
     private val favoriteBtn: CorrectImageButton
     private val getBtn: CorrectButton
@@ -19,12 +19,10 @@ class FavoriteDataView : LinearLayout {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         init(attrs)
     }
-
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int)
             : super(context, attrs, defStyleAttr) {
         init(attrs)
     }
-
     //endregion
     private fun init(attrs: AttributeSet) {
         context.theme.obtainStyledAttributes(attrs, R.styleable.FavoriteDataView, 0, 0).apply {
@@ -50,6 +48,10 @@ class FavoriteDataView : LinearLayout {
         checkBox = getChildAt(1) as CheckBox
         getBtn = getChildAt(2) as CorrectButton
         progressBar = getChildAt(3) as CorrectProgressBar
+    }
+
+    fun linkWith(viewModel: CommonViewModel) {
+
     }
 
     fun listenFavoriteCheckBox(block: (checked: Boolean) -> Unit) =

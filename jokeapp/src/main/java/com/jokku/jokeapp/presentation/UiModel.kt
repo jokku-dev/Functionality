@@ -3,25 +3,25 @@ package com.jokku.jokeapp.presentation
 import androidx.annotation.DrawableRes
 import com.jokku.jokeapp.R
 
-abstract class JokeUiModel(private val setup: String, private val punchline: String) {
+abstract class UiModel(private val firstText: String, private val secondText: String) {
     open fun show(communicator: Communicator) =
         communicator.showState(MainViewModel.State.Initial(getText(), getIconResId()))
 
-    protected open fun getText() = "$setup\n$punchline"
+    protected open fun getText() = "$firstText\n$secondText"
 
     @DrawableRes
     protected abstract fun getIconResId(): Int
 }
 
-class BaseJokeUiModel(setup: String, punchline: String) : JokeUiModel(setup, punchline) {
+class BaseUiModel(firstText: String, secondText: String) : UiModel(firstText, secondText) {
     override fun getIconResId() = R.drawable.ic_outline_favorite_border_34
 }
 
-class FavoriteJokeUiModel(setup: String, punchline: String) : JokeUiModel(setup, punchline) {
+class FavoriteUiModel(firstText: String, secondText: String) : UiModel(firstText, secondText) {
     override fun getIconResId() = R.drawable.ic_outline_favorite_34
 }
 
-class FailedJokeUiModel(private val error: String) : JokeUiModel(error, "") {
+class FailedUiModel(private val error: String) : UiModel(error, "") {
     override fun getText() = error
     override fun getIconResId() = 0
     override fun show(communicator: Communicator) = communicator.showState(

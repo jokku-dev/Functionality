@@ -1,22 +1,22 @@
 package com.jokku.jokeapp.data.cloud
 
 import com.jokku.jokeapp.core.Mapper
-import com.jokku.jokeapp.data.JokeDataFetcher
-import com.jokku.jokeapp.data.JokeDataModel
+import com.jokku.jokeapp.data.DataFetcher
+import com.jokku.jokeapp.data.RepoModel
 import com.jokku.jokeapp.domain.NoConnectionException
 import com.jokku.jokeapp.domain.ServiceUnavailableException
 import retrofit2.Call
 import java.net.UnknownHostException
 
-interface CloudDataSource : JokeDataFetcher
+interface CloudDataSource : DataFetcher
 
-abstract class BaseCloudDataSource<T : Mapper<JokeDataModel>> : CloudDataSource {
+abstract class BaseCloudDataSource<T : Mapper<RepoModel>> : CloudDataSource {
 
-    protected abstract fun getJokeServerModel(): Call<T>
+    protected abstract fun getServerModel(): Call<T>
 
-    override suspend fun getJoke() : JokeDataModel {
+    override suspend fun getData(): RepoModel {
         try {
-            return getJokeServerModel().execute().body()!!.map()
+            return getServerModel().execute().body()!!.map()
         } catch (e: Exception) {
             if (e is UnknownHostException) { //low-level exception
                 throw NoConnectionException() //high level exceptions
@@ -30,11 +30,20 @@ abstract class BaseCloudDataSource<T : Mapper<JokeDataModel>> : CloudDataSource 
 class JokeCloudDataSource(
     private val service: BaseJokeService
 ) : BaseCloudDataSource<JokeServerModel>() {
-    override fun getJokeServerModel(): Call<JokeServerModel> = service.getJoke()
- }
+
+    override fun getServerModel(): Call<JokeServerModel> = service.getJoke()
+}
 
 class NewJokeCloudDataSource(
     private val service: NewJokeService
 ) : BaseCloudDataSource<NewJokeServerModel>() {
-    override fun getJokeServerModel(): Call<NewJokeServerModel> = service.getJoke()
+
+    override fun getServerModel(): Call<NewJokeServerModel> = service.getJoke()
+}
+
+class QuoteCloudDataSource(
+    private val service: QuoteService
+) : BaseCloudDataSource<QuoteServerModel>() {
+
+    override fun getServerModel(): Call<QuoteServerModel> = service.getQuote()
 }

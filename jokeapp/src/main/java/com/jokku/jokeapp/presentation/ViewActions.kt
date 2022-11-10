@@ -6,9 +6,9 @@ interface Set<T> {
 interface Show<T> {
     fun show(visible: T)
 }
-interface SetText : Set<String>
-interface SetImage : Set<Int>, Show<Boolean>
-interface ShowBar : Show<Boolean>
-interface EnableBtn {
+interface TextSetter : Set<String>
+interface ImageSetter : Set<Int>, Show<Boolean>
+interface BarShow : Show<Boolean>
+interface BtnEnabler {
     fun enable(enabled: Boolean)
 }

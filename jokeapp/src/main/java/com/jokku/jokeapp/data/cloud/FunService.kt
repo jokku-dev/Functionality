@@ -12,3 +12,8 @@ interface NewJokeService {
     @GET("https://v2.jokeapi.dev/joke/Any")
     fun getJoke() : Call<NewJokeServerModel>
 }
+
+interface QuoteService {
+    @GET("https://api.quotable.io/random")
+    fun getQuote() : Call<QuoteServerModel>
+}
