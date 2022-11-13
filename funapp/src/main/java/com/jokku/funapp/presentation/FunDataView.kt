@@ -41,13 +41,13 @@ class FunDataView : LinearLayout {
         orientation = VERTICAL
         (context
             .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-            .inflate(R.layout.favorite_data_view, this, true)
-        val linear = getChildAt(0) as LinearLayout
-        textView = linear.findViewById(R.id.joke_tv)
-        favoriteBtn = linear.findViewById(R.id.favorite_ib)
-        checkBox = getChildAt(1) as CheckBox
-        getBtn = getChildAt(2) as CorrectButton
-        progressBar = getChildAt(3) as CorrectProgressBar
+            .inflate(R.layout.fun_data_view, this, true)
+        val horizontalLinear = getChildAt(0) as LinearLayout
+        textView = horizontalLinear.findViewById(R.id.joke_tv)
+        favoriteBtn = horizontalLinear.findViewById(R.id.favorite_ib)
+        checkBox = this.findViewById(R.id.favourite_joke_cb)
+        getBtn = this.findViewById(R.id.joke_btn)
+        progressBar = this.findViewById(R.id.progress_bar)
     }
 
     fun listenFavoriteCheckBox(block: (checked: Boolean) -> Unit) =

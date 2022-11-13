@@ -4,22 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
     tools:context=".presentation.MainActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        custom:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <com.jokku.funapp.presentation.FunDataView
         android:id="@+id/jokeDataView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         custom:actionButtonText="@string/get_joke"
-        custom:checkBoxText="@string/show_favorite_joke"/>
+        custom:checkBoxText="@string/show_favorite_joke" />
 
-    <com.jokku.funapp.presentation.FunDataView
+    <!--<com.jokku.funapp.presentation.FunDataView
         android:id="@+id/quoteDataView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         custom:actionButtonText="@string/get_quote"
-        custom:checkBoxText="@string/show_favorite_quote"/>
+        custom:checkBoxText="@string/show_favorite_quote"/>-->
 
 </LinearLayout>
