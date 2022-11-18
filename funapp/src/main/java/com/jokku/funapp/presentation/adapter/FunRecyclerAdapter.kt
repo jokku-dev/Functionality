@@ -6,37 +6,69 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jokku.funapp.R
-import com.jokku.funapp.data.RepoModel
-import com.jokku.funapp.presentation.CorrectTextView
+import com.jokku.funapp.presentation.*
 
-class FunRecyclerAdapter<E> : RecyclerView.Adapter<FunRecyclerAdapter<E>.FunViewHolder<E>>() {
-    private val list = ArrayList<RepoModel<E>>()
+class FunRecyclerAdapter<T>(
+    private val listener: FavoriteItemClickListener<T>,
+    private val communicator: Communicator<T>
+) : RecyclerView.Adapter<FunRecyclerAdapter.FunViewHolder<T>>() {
 
     @SuppressLint("NotifyDataSetChanged")
-    fun show(data: List<RepoModel<E>>) {
-        list.clear()
-        list.addAll(data)
+    fun update() {
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FunViewHolder<E> {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.fun_item, parent, false)
-        return FunViewHolder(view)
+    fun update(pair: Pair<Boolean, Int>) {
+        if (pair.first) {
+            notifyItemInserted(pair.second)
+        } else {
+            notifyItemRemoved(pair.second)
+        }
     }
 
-    override fun onBindViewHolder(holder: FunViewHolder<E>, position: Int) {
-        holder.bind(list[position])
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FunViewHolder<T> {
+        val emptyList = viewType == 0
+        val view = LayoutInflater.from(parent.context).inflate(
+            if (emptyList) R.layout.empty_list_item else R.layout.fun_list_item,
+            parent, false
+        )
+        return if (emptyList) FunViewHolder.Empty(view) else FunViewHolder.Base(view, listener)
+    }
+
+    override fun onBindViewHolder(holder: FunViewHolder<T>, position: Int) {
+        holder.bind(communicator.getList()[position])
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return communicator.getList().size
     }
 
-    inner class FunViewHolder<E>(view: View) : RecyclerView.ViewHolder(view) {
-        private val textView = itemView.findViewById<CorrectTextView>(R.id.fun_textView)
+    override fun getItemViewType(position: Int) = when (communicator.getList()[position]) {
+        is FailedUiModel -> 0
+        else -> 1
+    }
 
-        fun bind(model: RepoModel<E>) {
+    interface FavoriteItemClickListener<T> {
+        fun changeStatus(id: T)
+    }
+
+    abstract class FunViewHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
+        private val textView = itemView.findViewById<CorrectTextView>(R.id.common_tv)
+        open fun bind(model: UiModel<T>) {
             model.setText(textView)
         }
+
+        class Base<T>(view: View, private val listener: FavoriteItemClickListener<T>) :
+            FunViewHolder<T>(view) {
+            private val imageView = itemView.findViewById<CorrectImageButton>(R.id.list_favorite_ib)
+            override fun bind(model: UiModel<T>) {
+                super.bind(model)
+                imageView.setOnClickListener {
+                    model.changeStatus(listener)
+                }
+            }
+        }
+
+        class Empty<T>(view: View) : FunViewHolder<T>(view)
     }
 }

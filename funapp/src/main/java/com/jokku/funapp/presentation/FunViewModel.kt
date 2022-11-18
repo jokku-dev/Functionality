@@ -1,39 +1,64 @@
 package com.jokku.funapp.presentation
 
+import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jokku.funapp.domain.Interactor
+import com.jokku.funapp.domain.DomainItem
+import com.jokku.funapp.domain.FunInteractor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-interface CommonViewModel {
+interface FunViewModel<T> : FunItemViewModel, FunListViewModel<T>
+
+interface FunItemViewModel {
     fun getItem()
+    fun getItemList()
     fun changeItemStatus()
     fun chooseFavorites(favorites: Boolean)
-    fun observe(owner: LifecycleOwner, observer: Observer<MainViewModel.State>)
+    fun observe(owner: LifecycleOwner, observer: Observer<BaseFunViewModel.State>)
+}
+interface FunListViewModel<T> {
+    fun changeListItemStatus(id: T, owner: LifecycleOwner, observer: Observer<List<UiModel<T>>>): Int
+    fun observeList(owner: LifecycleOwner, observer: Observer<List<UiModel<T>>>)
 }
 
-class MainViewModel(
-    private val interactor: Interactor,
-    private val communicator: Communicator, //for testing purpose
+class BaseFunViewModel<T>(
+    private val interactor: FunInteractor<T>,
+    private val communicator: Communicator<T>, //for testing purpose
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main, //for testing purpose
-) : ViewModel(), CommonViewModel {
+) : ViewModel(), FunViewModel<T> {
 
+    @SuppressLint("SuspiciousIndentation")
     override fun changeItemStatus() {
         viewModelScope.launch(dispatcher) {
             if (communicator.isState(State.INITIAL))
                 interactor.changePreference().map().show(communicator)
+                getItemList()
         }
+    }
+
+    override fun changeListItemStatus(id: T, owner: LifecycleOwner, observer: Observer<List<UiModel<T>>>): Int {
+        viewModelScope.launch(dispatcher) {
+//            interactor.removeItem(id)
+            getItemList()
+        }
+        return communicator.removeItem(id, owner, observer)
     }
 
     override fun getItem() {
         viewModelScope.launch(dispatcher) {
             communicator.showState(State.Progress)
             interactor.getItem().map().show(communicator)
+        }
+    }
+
+    override fun getItemList() {
+        viewModelScope.launch(dispatcher) {
+            communicator.showDataList(interactor.getItemList().toUiModelList() as MutableList<UiModel<T>>)
         }
     }
 
@@ -44,6 +69,12 @@ class MainViewModel(
     override fun observe(owner: LifecycleOwner, observer: Observer<State>) {
         communicator.observe(owner, observer)
     }
+
+    override fun observeList(owner: LifecycleOwner, observer: Observer<List<UiModel<T>>>) {
+        communicator.observeList(owner, observer)
+    }
+
+    private fun List<DomainItem<T>>.toUiModelList() = map { it.map() }
 
     sealed class State {
         protected abstract val type: Int

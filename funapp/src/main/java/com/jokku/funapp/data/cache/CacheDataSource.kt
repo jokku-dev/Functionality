@@ -5,10 +5,13 @@ import com.jokku.funapp.data.DataFetcher
 import com.jokku.funapp.data.RepoModel
 import com.jokku.funapp.domain.NoCachedDataException
 import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.query.RealmResults
 import io.realm.kotlin.types.RealmObject
 import kotlin.reflect.KClass
 
-interface CacheDataSource<E> : DataFetcher<E>, StatusChanger<E>
+interface CacheDataSource<E> : DataFetcher<E>, StatusChanger<E> {
+    suspend fun getDataList(): List<RepoModel<E>>
+}
 
 interface StatusChanger<E> {
     suspend fun addOrRemove(id: E, model: RepoModel<E>): RepoModel<E>
@@ -36,11 +39,18 @@ abstract class BaseCacheDataSource<T : RealmObject, E>(
             }
         }
 
-    override suspend fun getData(): RepoModel<E> = realmProvider.provide().writeBlocking {
-        val list = this.query(realmClazz).find()
-        if (list.isEmpty()) throw NoCachedDataException()
-        else toRepoMapper.map(list.random())
+    override suspend fun getData(): RepoModel<E> = getRealmData { toRepoMapper.map(it.random()) }
+
+    override suspend fun getDataList(): List<RepoModel<E>> = getRealmData { results ->
+        results.map { toRepoMapper.map(it) }
     }
+
+    private fun <R> getRealmData(block: (list: RealmResults<T>) -> R) =
+        realmProvider.provide().writeBlocking {
+            val list = this.query(realmClazz).find()
+            if (list.isEmpty()) throw NoCachedDataException()
+            else block.invoke(list)
+        }
 }
 
 class JokeCacheDataSource(
@@ -50,7 +60,7 @@ class JokeCacheDataSource(
 ) : BaseCacheDataSource<JokeRealmModel, Int>(realmProvider, toRealmMapper, toRepoMapper) {
     override val realmClazz = JokeRealmModel::class
     override fun findRealmObject(realm: MutableRealm, id: Int) =
-        realm.query(realmClazz,"id == $0", id).first().find()
+        realm.query(realmClazz, "id == $0", id).first().find()
 }
 
 class QuoteCacheDataSource(
@@ -60,5 +70,5 @@ class QuoteCacheDataSource(
 ) : BaseCacheDataSource<QuoteRealmModel, String>(realmProvider, toRealmMapper, toRepoMapper) {
     override val realmClazz = QuoteRealmModel::class
     override fun findRealmObject(realm: MutableRealm, id: String) =
-        realm.query(realmClazz,"id == $0", id).first().find()
+        realm.query(realmClazz, "id == $0", id).first().find()
 }

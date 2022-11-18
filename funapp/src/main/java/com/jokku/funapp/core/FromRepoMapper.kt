@@ -26,7 +26,7 @@ class QuoteRealmMapper : FromRepoMapper<QuoteRealmModel, String> {
         }
 }
 
-class DomainSuccessMapper<E> : FromRepoMapper<DomainItem.Success, E> {
+class DomainSuccessMapper<E> : FromRepoMapper<DomainItem.Success<E>, E> {
     override fun map(id: E, firstText: String, secondText: String, cached: Boolean) =
-        DomainItem.Success(firstText, secondText, cached)
+        DomainItem.Success(id, firstText, secondText, cached)
 }

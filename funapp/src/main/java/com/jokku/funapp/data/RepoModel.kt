@@ -2,7 +2,6 @@ package com.jokku.funapp.data
 
 import com.jokku.funapp.core.FromRepoMapper
 import com.jokku.funapp.data.cache.StatusChanger
-import com.jokku.funapp.presentation.TextSetter
 
 class RepoModel<E>(
     private val id: E,
@@ -17,8 +16,6 @@ class RepoModel<E>(
     fun <T> map(mapper: FromRepoMapper<T, E>): T {
         return mapper.map(id, firstText, secondText, cached)
     }
-
-    fun setText(setter: TextSetter) = setter.set(firstText)
 
     fun changeCached(cached: Boolean): RepoModel<E> {
         return RepoModel(id, firstText, secondText, cached)
