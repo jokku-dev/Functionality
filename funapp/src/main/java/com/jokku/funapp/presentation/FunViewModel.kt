@@ -22,7 +22,7 @@ interface FunItemViewModel {
     fun observe(owner: LifecycleOwner, observer: Observer<BaseFunViewModel.State>)
 }
 interface FunListViewModel<T> {
-    fun changeListItemStatus(id: T, owner: LifecycleOwner, observer: Observer<List<UiModel<T>>>): Int
+    fun changeListItemStatus(id: T): Int
     fun observeList(owner: LifecycleOwner, observer: Observer<List<UiModel<T>>>)
 }
 
@@ -36,17 +36,17 @@ class BaseFunViewModel<T>(
     override fun changeItemStatus() {
         viewModelScope.launch(dispatcher) {
             if (communicator.isState(State.INITIAL))
-                interactor.changePreference().map().show(communicator)
-                getItemList()
+                interactor.changeIsFavorite().map().show(communicator)
+            communicator.showDataList(interactor.getItemList().toUiModelList())
         }
     }
 
-    override fun changeListItemStatus(id: T, owner: LifecycleOwner, observer: Observer<List<UiModel<T>>>): Int {
+    override fun changeListItemStatus(id: T): Int {
+        val position = communicator.removeItem(id)
         viewModelScope.launch(dispatcher) {
-//            interactor.removeItem(id)
-            getItemList()
+            interactor.removeItem(id)
         }
-        return communicator.removeItem(id, owner, observer)
+        return position
     }
 
     override fun getItem() {
@@ -58,12 +58,8 @@ class BaseFunViewModel<T>(
 
     override fun getItemList() {
         viewModelScope.launch(dispatcher) {
-            communicator.showDataList(interactor.getItemList().toUiModelList() as MutableList<UiModel<T>>)
+            communicator.showDataList(interactor.getItemList().toUiModelList())
         }
-    }
-
-    override fun chooseFavorites(favorites: Boolean) {
-            interactor.chooseFavorites(favorites)
     }
 
     override fun observe(owner: LifecycleOwner, observer: Observer<State>) {
@@ -72,6 +68,10 @@ class BaseFunViewModel<T>(
 
     override fun observeList(owner: LifecycleOwner, observer: Observer<List<UiModel<T>>>) {
         communicator.observeList(owner, observer)
+    }
+
+    override fun chooseFavorites(favorites: Boolean) {
+        interactor.chooseFavorites(favorites)
     }
 
     private fun List<DomainItem<T>>.toUiModelList() = map { it.map() }

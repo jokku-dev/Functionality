@@ -10,6 +10,7 @@ interface FunRepository<E> {
     suspend fun getFunItem(): RepoModel<E>
     suspend fun getFunItemList(): List<RepoModel<E>>
     suspend fun changeItemStatus(): RepoModel<E>
+    suspend fun removeItem(id: E)
     fun chooseDataSource(cached: Boolean)
 }
 
@@ -19,6 +20,10 @@ class BaseFunRepository<E>(
     private val repoCache: RepoCache<E>
 ) : FunRepository<E> {
     private var currentDataSource: DataFetcher<E> = cloudDataSource
+
+    override fun chooseDataSource(cached: Boolean) {
+        currentDataSource = if (cached) cacheDataSource else cloudDataSource
+    }
 
     override suspend fun getFunItem(): RepoModel<E> = withContext(Dispatchers.IO) {
         try {
@@ -39,7 +44,7 @@ class BaseFunRepository<E>(
         repoCache.changeItemStatus(cacheDataSource)
     }
 
-    override fun chooseDataSource(cached: Boolean) {
-        currentDataSource = if (cached) cacheDataSource else cloudDataSource
+    override suspend fun removeItem(id: E) {
+        cacheDataSource.remove(id)
     }
 }

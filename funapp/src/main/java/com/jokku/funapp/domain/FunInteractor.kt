@@ -6,7 +6,8 @@ import com.jokku.funapp.data.FunRepository
 interface FunInteractor<E> {
     suspend fun getItem(): DomainItem<E>
     suspend fun getItemList(): List<DomainItem<E>>
-    suspend fun changePreference(): DomainItem<E>
+    suspend fun changeIsFavorite(): DomainItem<E>
+    suspend fun removeItem(id: E)
     fun chooseFavorites(favorites: Boolean)
 }
 
@@ -34,7 +35,7 @@ class BaseFunInteractor<E>(
         }
     }
 
-    override suspend fun changePreference(): DomainItem<E> {
+    override suspend fun changeIsFavorite(): DomainItem<E> {
         return try {
             repository.changeItemStatus().map(mapper)
         } catch (e: Exception) {
@@ -42,7 +43,13 @@ class BaseFunInteractor<E>(
         }
     }
 
+    override suspend fun removeItem(id: E) {
+        repository.removeItem(id)
+    }
+
     override fun chooseFavorites(favorites: Boolean) {
         repository.chooseDataSource(favorites)
     }
+
+
 }

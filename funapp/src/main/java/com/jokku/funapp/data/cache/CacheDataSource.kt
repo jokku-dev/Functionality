@@ -9,12 +9,15 @@ import io.realm.kotlin.query.RealmResults
 import io.realm.kotlin.types.RealmObject
 import kotlin.reflect.KClass
 
-interface CacheDataSource<E> : DataFetcher<E>, StatusChanger<E> {
+interface CacheDataSource<E> : DataListFetcher<E>, StatusChanger<E>
+
+interface DataListFetcher<E> : DataFetcher<E> {
     suspend fun getDataList(): List<RepoModel<E>>
 }
 
 interface StatusChanger<E> {
     suspend fun addOrRemove(id: E, model: RepoModel<E>): RepoModel<E>
+    suspend fun remove(id: E)
 }
 
 abstract class BaseCacheDataSource<T : RealmObject, E>(
@@ -38,6 +41,10 @@ abstract class BaseCacheDataSource<T : RealmObject, E>(
                 model.changeCached(false)
             }
         }
+
+    override suspend fun remove(id: E): Unit = realmProvider.provide().writeBlocking {
+        findRealmObject(this, id)?.let { delete(it) }
+    }
 
     override suspend fun getData(): RepoModel<E> = getRealmData { toRepoMapper.map(it.random()) }
 

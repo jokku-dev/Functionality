@@ -36,7 +36,7 @@ class FunActivity : AppCompatActivity() {
                 )
                     .setAction(R.string.yes) {
                         val position =
-                            jokeViewModel.changeListItemStatus(id, this@FunActivity, observer)
+                            jokeViewModel.changeListItemStatus(id)
                         adapter.update(Pair(false, position))
                     }.show()
             }
