@@ -14,7 +14,6 @@ class FunActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         val jokeViewModel = (application as FunApplication).jokeViewModel
         val jokeCommunicator = (application as FunApplication).jokeCommunicator
         val jokeDataView = findViewById<FunDataView>(R.id.jokeDataView)
@@ -24,9 +23,6 @@ class FunActivity : AppCompatActivity() {
         }
 
         val jokeRecyclerView = findViewById<RecyclerView>(R.id.jokeRecyclerView)
-        val observer: (t: List<UiModel<Int>>) -> Unit = { _ ->
-            adapter.update()
-        }
         adapter = FunRecyclerAdapter(object : FunRecyclerAdapter.FavoriteItemClickListener<Int> {
             override fun changeStatus(id: Int) {
                 Snackbar.make(
@@ -35,15 +31,12 @@ class FunActivity : AppCompatActivity() {
                     Snackbar.LENGTH_SHORT
                 )
                     .setAction(R.string.yes) {
-                        val position =
-                            jokeViewModel.changeListItemStatus(id)
-                        adapter.update(Pair(false, position))
+                        jokeViewModel.changeItemStatus(id)
                     }.show()
             }
         }, jokeCommunicator)
 
         jokeRecyclerView.adapter = adapter
-        jokeViewModel.observeList(this, observer)
-        jokeViewModel.getItemList()
+        jokeViewModel.observeList(this) { adapter.update() }
     }
 }

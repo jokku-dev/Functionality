@@ -53,15 +53,15 @@ class FunDataView : LinearLayout {
         checkBox.setOnCheckedChangeListener { _, isChecked ->
             funViewModel.chooseFavorites(isChecked)
         }
-        favoriteBtn.setOnClickListener {
-            funViewModel.changeItemStatus()
-        }
         getBtn.setOnClickListener {
             funViewModel.getItem()
         }
+        favoriteBtn.setOnClickListener {
+            funViewModel.changeItemStatus()
+        }
     }
 
-    fun show(state: BaseFunViewModel.State) {
+    fun show(state: State) {
         state.show(progressBar, getBtn, textView, favoriteBtn)
     }
 }

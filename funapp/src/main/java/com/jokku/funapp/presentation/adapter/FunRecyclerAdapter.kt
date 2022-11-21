@@ -1,6 +1,5 @@
 package com.jokku.funapp.presentation.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,17 +12,9 @@ class FunRecyclerAdapter<T>(
     private val communicator: Communicator<T>
 ) : RecyclerView.Adapter<FunRecyclerAdapter.FunViewHolder<T>>() {
 
-    @SuppressLint("NotifyDataSetChanged")
     fun update() {
-        notifyDataSetChanged()
-    }
-
-    fun update(pair: Pair<Boolean, Int>) {
-        if (pair.first) {
-            notifyItemInserted(pair.second)
-        } else {
-            notifyItemRemoved(pair.second)
-        }
+        val result = communicator.getDiffResult()
+        result.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FunViewHolder<T> {
@@ -48,10 +39,6 @@ class FunRecyclerAdapter<T>(
         else -> 1
     }
 
-    interface FavoriteItemClickListener<T> {
-        fun changeStatus(id: T)
-    }
-
     abstract class FunViewHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
         private val textView = itemView.findViewById<CorrectTextView>(R.id.common_tv)
         open fun bind(model: UiModel<T>) {
@@ -70,5 +57,9 @@ class FunRecyclerAdapter<T>(
         }
 
         class Empty<T>(view: View) : FunViewHolder<T>(view)
+    }
+
+    interface FavoriteItemClickListener<T> {
+        fun changeStatus(id: T)
     }
 }

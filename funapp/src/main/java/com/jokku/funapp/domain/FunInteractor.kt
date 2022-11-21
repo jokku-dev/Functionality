@@ -8,7 +8,7 @@ interface FunInteractor<E> {
     suspend fun getItemList(): List<DomainItem<E>>
     suspend fun changeIsFavorite(): DomainItem<E>
     suspend fun removeItem(id: E)
-    fun chooseFavorites(favorites: Boolean)
+    fun getFavorites(favorites: Boolean)
 }
 
 class BaseFunInteractor<E>(
@@ -47,7 +47,7 @@ class BaseFunInteractor<E>(
         repository.removeItem(id)
     }
 
-    override fun chooseFavorites(favorites: Boolean) {
+    override fun getFavorites(favorites: Boolean) {
         repository.chooseDataSource(favorites)
     }
 
