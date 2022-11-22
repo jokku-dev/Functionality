@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jokku.funapp.R
 import com.jokku.funapp.presentation.*
 
-class FunRecyclerAdapter<T>(
+class RecyclerAdapter<T>(
     private val listener: FavoriteItemClickListener<T>,
     private val communicator: Communicator<T>
-) : RecyclerView.Adapter<FunRecyclerAdapter.FunViewHolder<T>>() {
+) : RecyclerView.Adapter<RecyclerAdapter.FunViewHolder<T>>() {
 
     fun update() {
         val result = communicator.getDiffResult()

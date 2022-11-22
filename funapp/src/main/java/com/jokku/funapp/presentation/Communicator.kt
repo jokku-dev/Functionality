@@ -32,7 +32,7 @@ class BaseCommunicator<T> : Communicator<T> {
     }
 
     override fun showDataList(list: List<UiModel<T>>) {
-        val callback = DiffUtilCallback(listLiveData.value ?: emptyList(), list)
+        val callback = DiffUtilCallback(getList(), list)
         diffResult = DiffUtil.calculateDiff(callback)
         listLiveData.value = ArrayList(list)
     }

@@ -31,7 +31,7 @@
     </LinearLayout>
 
     <CheckBox
-        android:id="@+id/favourite_joke_cb"
+        android:id="@+id/favourite_cb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -40,7 +40,7 @@
         tools:text="@string/show_favorite_joke" />
 
     <com.jokku.funapp.presentation.CorrectButton
-        android:id="@+id/joke_btn"
+        android:id="@+id/action_btn"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

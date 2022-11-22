@@ -10,11 +10,9 @@ import io.realm.kotlin.types.RealmObject
 import kotlin.reflect.KClass
 
 interface CacheDataSource<E> : DataListFetcher<E>, StatusChanger<E>
-
 interface DataListFetcher<E> : DataFetcher<E> {
     suspend fun getDataList(): List<RepoModel<E>>
 }
-
 interface StatusChanger<E> {
     suspend fun addOrRemove(id: E, model: RepoModel<E>): RepoModel<E>
     suspend fun remove(id: E)

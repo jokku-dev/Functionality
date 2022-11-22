@@ -10,4 +10,6 @@
     <string name="generic_fail_message">Unknown error</string>
     <string name="remove_from_favorites">Remove from favorites?</string>
     <string name="yes">Yes</string>
+    <string name="jokes">Jokes</string>
+    <string name="quotes">Quotes</string>
 </resources>

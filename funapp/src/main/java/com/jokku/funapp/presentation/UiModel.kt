@@ -2,7 +2,7 @@ package com.jokku.funapp.presentation
 
 import androidx.annotation.DrawableRes
 import com.jokku.funapp.R
-import com.jokku.funapp.presentation.adapter.FunRecyclerAdapter
+import com.jokku.funapp.presentation.adapter.RecyclerAdapter
 
 abstract class UiModel<T>(private val firstText: String, private val secondText: String) {
     fun setText(textView: TextSetter) = textView.set(getText())
@@ -11,7 +11,7 @@ abstract class UiModel<T>(private val firstText: String, private val secondText:
 
     open fun matches(id: T): Boolean = false
     open fun same(model: UiModel<T>): Boolean = false
-    open fun changeStatus(listener: FunRecyclerAdapter.FavoriteItemClickListener<T>) = Unit
+    open fun changeStatus(listener: RecyclerAdapter.FavoriteItemClickListener<T>) = Unit
     protected open fun getText() = "$firstText\n$secondText"
 
     @DrawableRes
@@ -24,7 +24,7 @@ class BaseUiModel<T>(firstText: String, secondText: String) : UiModel<T>(firstTe
 
 class FavoriteUiModel<T>(private val id: T, firstText: String, secondText: String) :
     UiModel<T>(firstText, secondText) {
-    override fun changeStatus(listener: FunRecyclerAdapter.FavoriteItemClickListener<T>) {
+    override fun changeStatus(listener: RecyclerAdapter.FavoriteItemClickListener<T>) {
         listener.changeStatus(id)
     }
 

@@ -5,55 +5,46 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.CheckBox
 import android.widget.LinearLayout
+import androidx.annotation.StringRes
 import com.jokku.funapp.R
 
 class FunDataView : LinearLayout {
     private lateinit var textView: CorrectTextView
     private lateinit var favoriteBtn: CorrectImageButton
-    private lateinit var getBtn: CorrectButton
+    private lateinit var actionBtn: CorrectButton
     private lateinit var checkBox: CheckBox
     private lateinit var progressBar: CorrectProgressBar
     //region
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(attrs)
+        init()
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) :
             super(context, attrs, defStyleAttr) {
-        init(attrs)
+        init()
     }
 
     //endregion
-    private fun init(attrs: AttributeSet) {
+    private fun init() {
         orientation = VERTICAL
-        (context
-            .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+        (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
             .inflate(R.layout.fun_data_view, this, true)
         val horizontalLinear = getChildAt(0) as LinearLayout
         textView = horizontalLinear.findViewById(R.id.joke_tv)
         favoriteBtn = horizontalLinear.findViewById(R.id.favorite_ib)
-        checkBox = this.findViewById(R.id.favourite_joke_cb)
-        getBtn = this.findViewById(R.id.joke_btn)
+        checkBox = this.findViewById(R.id.favourite_cb)
+        actionBtn = this.findViewById(R.id.action_btn)
         progressBar = this.findViewById(R.id.progress_bar)
-
-        context.theme.obtainStyledAttributes(attrs, R.styleable.FavoriteDataView, 0, 0).apply {
-            try {
-                val getBtnText = getString(R.styleable.FavoriteDataView_actionButtonText)
-                val checkBoxText = getString(R.styleable.FavoriteDataView_checkBoxText)
-                checkBox.text = checkBoxText
-                getBtn.text = getBtnText
-            } finally {
-                recycle()
-            }
-        }
     }
 
+    fun checkBoxText(@StringRes id: Int) = checkBox.setText(id)
+    fun actionButtonText(@StringRes id: Int) = actionBtn.setText(id)
     fun linkWith(funViewModel: FunItemViewModel) {
         checkBox.setOnCheckedChangeListener { _, isChecked ->
             funViewModel.chooseFavorites(isChecked)
         }
-        getBtn.setOnClickListener {
+        actionBtn.setOnClickListener {
             funViewModel.getItem()
         }
         favoriteBtn.setOnClickListener {
@@ -62,6 +53,6 @@ class FunDataView : LinearLayout {
     }
 
     fun show(state: State) {
-        state.show(progressBar, getBtn, textView, favoriteBtn)
+        state.show(progressBar, actionBtn, textView, favoriteBtn)
     }
 }

@@ -19,7 +19,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class FunApplication : Application() {
+class FunApp : Application() {
     lateinit var jokeViewModel: FunViewModel<Int>
     lateinit var quoteViewModel: FunViewModel<String>
     lateinit var jokeCommunicator: Communicator<Int>
