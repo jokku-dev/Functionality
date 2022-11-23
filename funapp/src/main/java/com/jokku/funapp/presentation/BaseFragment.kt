@@ -1,21 +1,33 @@
 package com.jokku.funapp.presentation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.jokku.funapp.FunApp
 import com.jokku.funapp.R
 import com.jokku.funapp.presentation.adapter.RecyclerAdapter
 
-abstract class BaseFragment<T> : Fragment() {
-    protected abstract fun getViewModel(app: FunApp): FunViewModel<T>
-    protected abstract fun getCommunicator(app: FunApp): Communicator<T>
+abstract class BaseFragment<V : BaseViewModel<T>, T> : Fragment() {
+    protected abstract fun getViewModelClass(): Class<V>
     protected abstract fun checkBoxText(): Int
     protected abstract fun actionButtonText(): Int
+
+    private lateinit var viewModel: BaseViewModel<T>
+
+    fun tag(): String = javaClass.simpleName
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(
+            this,
+            (requireActivity().application as FunApp).viewModelFactory
+        )[getViewModelClass()]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -25,9 +37,6 @@ abstract class BaseFragment<T> : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val application = requireActivity().application as FunApp
-        val viewModel = getViewModel(application)
-        val communicator = getCommunicator(application)
         val funDataView = view.findViewById<FunDataView>(R.id.funDataView)
         funDataView.linkWith(viewModel)
         funDataView.checkBoxText(checkBoxText())
@@ -49,7 +58,7 @@ abstract class BaseFragment<T> : Fragment() {
                         viewModel.changeItemStatus(id)
                     }.show()
             }
-        }, communicator)
+        }, viewModel.communicator)
         jokeRecyclerView.adapter = adapter
 
         viewModel.observeList(this) { adapter.update() }

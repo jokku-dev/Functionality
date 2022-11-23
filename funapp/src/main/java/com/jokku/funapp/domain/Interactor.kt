@@ -1,9 +1,9 @@
 package com.jokku.funapp.domain
 
 import com.jokku.funapp.core.FromRepoMapper
-import com.jokku.funapp.data.FunRepository
+import com.jokku.funapp.data.Repository
 
-interface FunInteractor<E> {
+interface Interactor<E> {
     suspend fun getItem(): DomainItem<E>
     suspend fun getItemList(): List<DomainItem<E>>
     suspend fun changeIsFavorite(): DomainItem<E>
@@ -11,11 +11,11 @@ interface FunInteractor<E> {
     fun getFavorites(favorites: Boolean)
 }
 
-class BaseFunInteractor<E>(
-    private val repository: FunRepository<E>,
+class BaseInteractor<E>(
+    private val repository: Repository<E>,
     private val failureHandler: FailureHandler,
     private val mapper: FromRepoMapper<DomainItem.Success<E>, E>
-) : FunInteractor<E> {
+) : Interactor<E> {
 
     override suspend fun getItem(): DomainItem<E> {
         return try {

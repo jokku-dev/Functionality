@@ -6,7 +6,7 @@ import com.jokku.funapp.data.cloud.CloudDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-interface FunRepository<E> {
+interface Repository<E> {
     suspend fun getFunItem(): RepoModel<E>
     suspend fun getFunItemList(): List<RepoModel<E>>
     suspend fun changeItemStatus(): RepoModel<E>
@@ -14,11 +14,11 @@ interface FunRepository<E> {
     fun chooseDataSource(cached: Boolean)
 }
 
-class BaseFunRepository<E>(
+class BaseRepository<E>(
     private val cacheDataSource: CacheDataSource<E>,
     private val cloudDataSource: CloudDataSource<E>,
     private val repoCache: RepoCache<E>
-) : FunRepository<E> {
+) : Repository<E> {
     private var currentDataSource: DataFetcher<E> = cloudDataSource
 
     override fun chooseDataSource(cached: Boolean) {
