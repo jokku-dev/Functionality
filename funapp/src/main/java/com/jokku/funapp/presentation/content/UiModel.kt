@@ -1,8 +1,9 @@
-package com.jokku.funapp.presentation
+package com.jokku.funapp.presentation.content
 
 import androidx.annotation.DrawableRes
 import com.jokku.funapp.R
 import com.jokku.funapp.presentation.adapter.RecyclerAdapter
+import com.jokku.funapp.presentation.fragment.Communicator
 
 abstract class UiModel<T>(private val firstText: String, private val secondText: String) {
     fun setText(textView: TextSetter) = textView.set(getText())

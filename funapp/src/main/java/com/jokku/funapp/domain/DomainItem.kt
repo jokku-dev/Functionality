@@ -1,7 +1,7 @@
 package com.jokku.funapp.domain
 
 import com.jokku.funapp.core.Mapper
-import com.jokku.funapp.presentation.*
+import com.jokku.funapp.presentation.content.*
 
 sealed class DomainItem<E> : Mapper<UiModel<E>> {
 

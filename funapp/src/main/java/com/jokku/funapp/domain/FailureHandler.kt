@@ -1,7 +1,7 @@
 package com.jokku.funapp.domain
 
 import com.jokku.funapp.ResourceManager
-import com.jokku.funapp.presentation.*
+import com.jokku.funapp.presentation.content.*
 
 interface FailureHandler {
     fun handle(e: Exception): FailureMessenger

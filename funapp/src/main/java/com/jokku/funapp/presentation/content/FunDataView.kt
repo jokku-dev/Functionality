@@ -1,4 +1,4 @@
-package com.jokku.funapp.presentation
+package com.jokku.funapp.presentation.content
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,6 +7,7 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import androidx.annotation.StringRes
 import com.jokku.funapp.R
+import com.jokku.funapp.presentation.fragment.FunItemViewModel
 
 class FunDataView : LinearLayout {
     private lateinit var textView: CorrectTextView
@@ -14,6 +15,7 @@ class FunDataView : LinearLayout {
     private lateinit var actionBtn: CorrectButton
     private lateinit var checkBox: CheckBox
     private lateinit var progressBar: CorrectProgressBar
+
     //region
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {

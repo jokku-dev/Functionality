@@ -1,4 +1,4 @@
-package com.jokku.funapp.presentation
+package com.jokku.funapp.presentation.content
 
 import android.content.Context
 import android.util.AttributeSet

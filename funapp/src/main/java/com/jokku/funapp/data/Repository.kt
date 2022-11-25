@@ -3,6 +3,7 @@ package com.jokku.funapp.data
 import com.jokku.funapp.data.cache.CacheDataSource
 import com.jokku.funapp.data.cache.RepoCache
 import com.jokku.funapp.data.cloud.CloudDataSource
+import com.jokku.funapp.domain.NoCachedDataException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -26,18 +27,18 @@ class BaseRepository<E>(
     }
 
     override suspend fun getFunItem(): RepoModel<E> = withContext(Dispatchers.IO) {
-        try {
-            val data = currentDataSource.getData()
-            repoCache.save(data)
-            data
-        } catch (e: Exception) {
+        val data = currentDataSource.getData()
+        repoCache.save(data)
+        if (data.isEmpty()) {
             repoCache.clear()
-            throw e
-        }
+            throw NoCachedDataException()
+        } else data
+
+
     }
 
     override suspend fun getFunItemList(): List<RepoModel<E>> = withContext(Dispatchers.IO) {
-        cacheDataSource.getDataList()
+        cacheDataSource.getDataList().ifEmpty { throw NoCachedDataException() }
     }
 
     override suspend fun changeItemStatus(): RepoModel<E> = withContext(Dispatchers.IO) {

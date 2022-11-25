@@ -1,4 +1,4 @@
-package com.jokku.funapp.presentation
+package com.jokku.funapp.presentation.content
 
 import androidx.recyclerview.widget.DiffUtil
 
@@ -11,6 +11,7 @@ class DiffUtilCallback<E>(
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldList[oldItemPosition].same(newList[newItemPosition])
     }
+
     //we don't need this due to sufficiency of the item comparison for this case
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = false
 }

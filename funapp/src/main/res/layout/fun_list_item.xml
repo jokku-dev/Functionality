@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <com.jokku.funapp.presentation.CorrectTextView
+    <com.jokku.funapp.presentation.content.CorrectTextView
         android:id="@+id/common_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         tools:text="Long text with intention to show ellipsized text in the end of this line" />
 
-    <com.jokku.funapp.presentation.CorrectImageButton
+    <com.jokku.funapp.presentation.content.CorrectImageButton
         android:id="@+id/list_favorite_ib"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,5 +23,5 @@
         android:layout_weight="5"
         android:background="?selectableItemBackground"
         android:tint="@color/purple_200"
-        android:src="@drawable/ic_outline_favorite_34"/>
+        android:src="@drawable/ic_outline_favorite_34" />
 </LinearLayout>
