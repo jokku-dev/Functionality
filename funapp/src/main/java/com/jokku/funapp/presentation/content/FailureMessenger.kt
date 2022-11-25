@@ -1,4 +1,4 @@
-package com.jokku.funapp.presentation
+package com.jokku.funapp.presentation.content
 
 import com.jokku.funapp.R
 import com.jokku.funapp.ResourceManager
@@ -6,6 +6,7 @@ import com.jokku.funapp.ResourceManager
 interface FailureMessenger {
     fun getMessage(): String
 }
+
 class NoConnection(private val resourceManager: ResourceManager) : FailureMessenger {
     override fun getMessage() = resourceManager.getString(R.string.no_connection)
 }

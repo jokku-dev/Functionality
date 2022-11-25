@@ -1,4 +1,4 @@
-package com.jokku.funapp.presentation
+package com.jokku.funapp.presentation.fragment
 
 import com.jokku.funapp.R
 

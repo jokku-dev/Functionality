@@ -13,6 +13,7 @@ class RepoModel<E>(
     override suspend fun changeItemStatus(statusChanger: StatusChanger<E>): RepoModel<E> {
         return statusChanger.addOrRemove(id, this)
     }
+
     fun <T> map(mapper: FromRepoMapper<T, E>): T {
         return mapper.map(id, firstText, secondText, cached)
     }
@@ -20,4 +21,6 @@ class RepoModel<E>(
     fun changeCached(cached: Boolean): RepoModel<E> {
         return RepoModel(id, firstText, secondText, cached)
     }
+
+    fun isEmpty() = this.id == -1
 }

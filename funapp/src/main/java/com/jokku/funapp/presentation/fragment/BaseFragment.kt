@@ -1,9 +1,10 @@
-package com.jokku.funapp.presentation
+package com.jokku.funapp.presentation.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -11,10 +12,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.jokku.funapp.FunApp
 import com.jokku.funapp.R
 import com.jokku.funapp.presentation.adapter.RecyclerAdapter
+import com.jokku.funapp.presentation.content.FunDataView
 
 abstract class BaseFragment<V : BaseViewModel<T>, T> : Fragment() {
     protected abstract fun getViewModelClass(): Class<V>
+    @StringRes
     protected abstract fun checkBoxText(): Int
+    @StringRes
     protected abstract fun actionButtonText(): Int
 
     private lateinit var viewModel: BaseViewModel<T>
@@ -41,7 +45,6 @@ abstract class BaseFragment<V : BaseViewModel<T>, T> : Fragment() {
         funDataView.linkWith(viewModel)
         funDataView.checkBoxText(checkBoxText())
         funDataView.actionButtonText(actionButtonText())
-
         viewModel.observe(this) { state ->
             funDataView.show(state)
         }
@@ -58,9 +61,10 @@ abstract class BaseFragment<V : BaseViewModel<T>, T> : Fragment() {
                         viewModel.changeItemStatus(id)
                     }.show()
             }
-        }, viewModel.communicator)
+        }, viewModel)
         jokeRecyclerView.adapter = adapter
-
         viewModel.observeList(this) { adapter.update() }
+
+        viewModel.getItemList()
     }
 }

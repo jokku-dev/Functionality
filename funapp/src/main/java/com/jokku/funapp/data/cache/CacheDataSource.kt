@@ -3,7 +3,6 @@ package com.jokku.funapp.data.cache
 import com.jokku.funapp.core.*
 import com.jokku.funapp.data.DataFetcher
 import com.jokku.funapp.data.RepoModel
-import com.jokku.funapp.domain.NoCachedDataException
 import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.query.RealmResults
 import io.realm.kotlin.types.RealmObject
@@ -13,6 +12,7 @@ interface CacheDataSource<E> : DataListFetcher<E>, StatusChanger<E>
 interface DataListFetcher<E> : DataFetcher<E> {
     suspend fun getDataList(): List<RepoModel<E>>
 }
+
 interface StatusChanger<E> {
     suspend fun addOrRemove(id: E, model: RepoModel<E>): RepoModel<E>
     suspend fun remove(id: E)
@@ -44,17 +44,18 @@ abstract class BaseCacheDataSource<T : RealmObject, E>(
         findRealmObject(this, id)?.let { delete(it) }
     }
 
-    override suspend fun getData(): RepoModel<E> = getRealmData { toRepoMapper.map(it.random()) }
+    override suspend fun getData(): RepoModel<E> = getRealmData { list ->
+        if (list.isEmpty()) RepoModel(-1 as E, "", "")
+        else toRepoMapper.map(list.random())
+    }
 
-    override suspend fun getDataList(): List<RepoModel<E>> = getRealmData { results ->
-        results.map { toRepoMapper.map(it) }
+    override suspend fun getDataList(): List<RepoModel<E>> = getRealmData { list ->
+        list.map { toRepoMapper.map(it) }
     }
 
     private fun <R> getRealmData(block: (list: RealmResults<T>) -> R) =
         realmProvider.provide().writeBlocking {
-            val list = this.query(realmClazz).find()
-            if (list.isEmpty()) throw NoCachedDataException()
-            else block.invoke(list)
+            block.invoke(this.query(realmClazz).find())
         }
 }
 

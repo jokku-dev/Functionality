@@ -5,11 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jokku.funapp.R
-import com.jokku.funapp.presentation.*
+import com.jokku.funapp.presentation.content.CorrectImageButton
+import com.jokku.funapp.presentation.content.CorrectTextView
+import com.jokku.funapp.presentation.content.FailedUiModel
+import com.jokku.funapp.presentation.content.UiModel
+import com.jokku.funapp.presentation.fragment.Communicator
+import com.jokku.funapp.presentation.fragment.ListChanges
 
 class RecyclerAdapter<T>(
     private val listener: FavoriteItemClickListener<T>,
-    private val communicator: Communicator<T>
+    private val communicator: ListChanges<T>
 ) : RecyclerView.Adapter<RecyclerAdapter.FunViewHolder<T>>() {
 
     fun update() {
@@ -35,7 +40,7 @@ class RecyclerAdapter<T>(
     }
 
     override fun getItemViewType(position: Int) = when (communicator.getList()[position]) {
-        is FailedUiModel -> 0
+        is FailedUiModel<T> -> 0
         else -> 1
     }
 

@@ -14,7 +14,7 @@
         android:layout_weight="1"
         custom:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <com.jokku.funapp.presentation.FunDataView
+    <com.jokku.funapp.presentation.content.FunDataView
         android:id="@+id/funDataView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

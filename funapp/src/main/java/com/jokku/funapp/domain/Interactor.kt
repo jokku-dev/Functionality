@@ -27,9 +27,7 @@ class BaseInteractor<E>(
 
     override suspend fun getItemList(): List<DomainItem<E>> {
         return try {
-            repository.getFunItemList().map {
-                it.map(mapper)
-            }
+            repository.getFunItemList().map { it.map(mapper) }
         } catch (e: Exception) {
             listOf(DomainItem.Failed(failureHandler.handle(e)))
         }

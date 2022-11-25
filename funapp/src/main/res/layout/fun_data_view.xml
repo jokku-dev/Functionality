@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.jokku.funapp.presentation.CorrectTextView
+        <com.jokku.funapp.presentation.content.CorrectTextView
             android:id="@+id/joke_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             tools:text="Long text with intention to show ellipsized text in the end of this line" />
 
-        <com.jokku.funapp.presentation.CorrectImageButton
+        <com.jokku.funapp.presentation.content.CorrectImageButton
             android:id="@+id/favorite_ib"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
         android:buttonTint="@color/purple_500"
         tools:text="@string/show_favorite_joke" />
 
-    <com.jokku.funapp.presentation.CorrectButton
+    <com.jokku.funapp.presentation.content.CorrectButton
         android:id="@+id/action_btn"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
         android:layout_marginBottom="64dp"
         tools:text="@string/get_joke" />
 
-    <com.jokku.funapp.presentation.CorrectProgressBar
+    <com.jokku.funapp.presentation.content.CorrectProgressBar
         android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"

@@ -1,9 +1,12 @@
-package com.jokku.funapp.presentation
+package com.jokku.funapp.presentation.fragment
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
+import com.jokku.funapp.presentation.content.DiffUtilCallback
+import com.jokku.funapp.presentation.content.State
+import com.jokku.funapp.presentation.content.UiModel
 
 interface Communicator<T> : StateCommunicator, ListCommunicator<T>
 interface StateCommunicator {
@@ -11,6 +14,7 @@ interface StateCommunicator {
     fun showState(state: State)
     fun observe(owner: LifecycleOwner, observer: Observer<State>)
 }
+
 interface ListCommunicator<T> {
     fun getList(): List<UiModel<T>>
     fun getDiffResult(): DiffUtil.DiffResult
