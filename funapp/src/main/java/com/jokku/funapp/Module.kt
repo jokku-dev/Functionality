@@ -8,6 +8,8 @@ import com.jokku.funapp.data.cloud.NewJokeCloudDataSource
 import com.jokku.funapp.data.cloud.NewJokeService
 import com.jokku.funapp.data.cloud.QuoteCloudDataSource
 import com.jokku.funapp.data.cloud.QuoteService
+import com.jokku.funapp.data.cloud.mock.MockJokeCloudDataSource
+import com.jokku.funapp.data.cloud.mock.MockQuoteCloudDataSource
 import com.jokku.funapp.domain.BaseInteractor
 import com.jokku.funapp.domain.FailureHandler
 import com.jokku.funapp.presentation.MainViewModel
@@ -34,7 +36,8 @@ class MainModule(private val persistentDataSource: PersistentDataSource) : Modul
 class JokesModule(
     private val failureHandler: FailureHandler,
     private val realmProvider: RealmProvider,
-    private val retrofit: Retrofit
+    private val retrofit: Retrofit,
+    private val useMocks: Boolean
 ) : Module.Base<Int, JokesViewModel>() {
     private var communicator: Communicator<Int>? = null
 
@@ -54,14 +57,17 @@ class JokesModule(
     private fun getCacheDataSource() =
         JokeCacheDataSource(realmProvider, JokeRealmMapper(), JokeRealmToRepoMapper())
 
-    private fun getCloudDataSource() =
+    private fun getCloudDataSource() = if (useMocks)
+        MockJokeCloudDataSource()
+    else
         NewJokeCloudDataSource(retrofit.create(NewJokeService::class.java))
 }
 
 class QuotesModule(
     private val failureHandler: FailureHandler,
     private val realmProvider: RealmProvider,
-    private val retrofit: Retrofit
+    private val retrofit: Retrofit,
+    private val useMocks: Boolean
 ) : Module.Base<String, QuotesViewModel>() {
     private var communicator: Communicator<String>? = null
 
@@ -81,6 +87,10 @@ class QuotesModule(
     private fun getCacheDataSource() =
         QuoteCacheDataSource(realmProvider, QuoteRealmMapper(), QuoteRealmToRepoMapper())
 
-    private fun getCloudDataSource() =
+    private fun getCloudDataSource() = if (useMocks)
+        MockQuoteCloudDataSource()
+    else
         QuoteCloudDataSource(retrofit.create(QuoteService::class.java))
+
+
 }

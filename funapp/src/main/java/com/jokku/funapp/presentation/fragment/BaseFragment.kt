@@ -41,7 +41,7 @@ abstract class BaseFragment<V : BaseViewModel<T>, T> : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val funDataView = view.findViewById<FunDataView>(R.id.funDataView)
+        val funDataView = view.findViewById<FunDataView>(R.id.fun_data_view)
         funDataView.linkWith(viewModel)
         funDataView.checkBoxText(checkBoxText())
         funDataView.actionButtonText(actionButtonText())
@@ -49,7 +49,7 @@ abstract class BaseFragment<V : BaseViewModel<T>, T> : Fragment() {
             funDataView.show(state)
         }
 
-        val jokeRecyclerView = view.findViewById<RecyclerView>(R.id.jokeRecyclerView)
+        val jokeRecyclerView = view.findViewById<RecyclerView>(R.id.fun_recycler_view)
         val adapter = RecyclerAdapter(object : RecyclerAdapter.FavoriteItemClickListener<T> {
             override fun changeStatus(id: T) {
                 Snackbar.make(

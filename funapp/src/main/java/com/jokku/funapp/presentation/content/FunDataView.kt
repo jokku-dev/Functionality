@@ -33,9 +33,9 @@ class FunDataView : LinearLayout {
         (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
             .inflate(R.layout.fun_data_view, this, true)
         val horizontalLinear = getChildAt(0) as LinearLayout
-        textView = horizontalLinear.findViewById(R.id.joke_tv)
+        textView = horizontalLinear.findViewById(R.id.fun_tv)
         favoriteBtn = horizontalLinear.findViewById(R.id.favorite_ib)
-        checkBox = this.findViewById(R.id.favourite_cb)
+        checkBox = this.findViewById(R.id.favorites_cb)
         actionBtn = this.findViewById(R.id.action_btn)
         progressBar = this.findViewById(R.id.progress_bar)
     }

@@ -44,18 +44,18 @@ abstract class BaseCacheDataSource<T : RealmObject, E>(
         findRealmObject(this, id)?.let { delete(it) }
     }
 
-    override suspend fun getData(): RepoModel<E> = getRealmData { list ->
-        if (list.isEmpty()) RepoModel(-1 as E, "", "")
-        else toRepoMapper.map(list.random())
+    override suspend fun getData(): RepoModel<E> = getRealmData { results ->
+        if (results.isEmpty()) RepoModel(-1 as E, "", "")
+        else toRepoMapper.map(results.random())
     }
 
-    override suspend fun getDataList(): List<RepoModel<E>> = getRealmData { list ->
-        list.map { toRepoMapper.map(it) }
+    override suspend fun getDataList(): List<RepoModel<E>> = getRealmData { results ->
+        results.map { toRepoMapper.map(it) }
     }
 
     private fun <R> getRealmData(block: (list: RealmResults<T>) -> R) =
         realmProvider.provide().writeBlocking {
-            block.invoke(this.query(realmClazz).find())
+            block.invoke(query(realmClazz).find())
         }
 }
 

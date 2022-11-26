@@ -9,7 +9,7 @@
         android:orientation="horizontal">
 
         <com.jokku.funapp.presentation.content.CorrectTextView
-            android:id="@+id/joke_tv"
+            android:id="@+id/fun_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -31,7 +31,7 @@
     </LinearLayout>
 
     <CheckBox
-        android:id="@+id/favourite_cb"
+        android:id="@+id/favorites_cb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

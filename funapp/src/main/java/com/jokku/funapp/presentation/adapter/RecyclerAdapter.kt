@@ -9,7 +9,6 @@ import com.jokku.funapp.presentation.content.CorrectImageButton
 import com.jokku.funapp.presentation.content.CorrectTextView
 import com.jokku.funapp.presentation.content.FailedUiModel
 import com.jokku.funapp.presentation.content.UiModel
-import com.jokku.funapp.presentation.fragment.Communicator
 import com.jokku.funapp.presentation.fragment.ListChanges
 
 class RecyclerAdapter<T>(
@@ -45,7 +44,7 @@ class RecyclerAdapter<T>(
     }
 
     abstract class FunViewHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
-        private val textView = itemView.findViewById<CorrectTextView>(R.id.common_tv)
+        private val textView = itemView.findViewById<CorrectTextView>(R.id.list_favorite_tv)
         open fun bind(model: UiModel<T>) {
             model.setText(textView)
         }

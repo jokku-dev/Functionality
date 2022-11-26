@@ -8,14 +8,14 @@
     tools:context=".presentation.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/jokeRecyclerView"
+        android:id="@+id/fun_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         custom:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <com.jokku.funapp.presentation.content.FunDataView
-        android:id="@+id/funDataView"
+        android:id="@+id/fun_data_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:actionButtonText="@string/get_joke"

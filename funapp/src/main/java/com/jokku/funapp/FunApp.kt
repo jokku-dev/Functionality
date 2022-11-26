@@ -1,6 +1,7 @@
 package com.jokku.funapp
 
 import android.app.Application
+import com.jokku.funapp.data.cache.BaseRealmProvider
 import com.jokku.funapp.data.cache.PersistentDataSource
 import com.jokku.funapp.data.cache.RealmProvider
 import com.jokku.funapp.domain.FailureFactory
@@ -15,10 +16,11 @@ class FunApp : Application() {
     val viewModelFactory by lazy {
         ViewModelFactory(
             MainModule(persistentDataSource),
-            JokesModule(failureHandler, realmProvider, retrofit),
-            QuotesModule(failureHandler, realmProvider, retrofit)
+            JokesModule(failureHandler, realmProvider, retrofit, useMocks),
+            QuotesModule(failureHandler, realmProvider, retrofit, useMocks)
         )
     }
+    private val useMocks = false
     private lateinit var retrofit: Retrofit
     private lateinit var realmProvider: RealmProvider
     private lateinit var failureHandler: FailureHandler
@@ -36,7 +38,7 @@ class FunApp : Application() {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        realmProvider = RealmProvider()
+        realmProvider = BaseRealmProvider(useMocks)
         failureHandler = FailureFactory(BaseResourceManager(this))
         persistentDataSource = PersistentDataSource.Base(this)
     }

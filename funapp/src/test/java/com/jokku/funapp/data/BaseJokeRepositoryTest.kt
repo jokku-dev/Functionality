@@ -1,4 +1,4 @@
-package com.jokku.funapp
+package com.jokku.funapp.data
 
 
 class BaseJokeRepositoryTest {
