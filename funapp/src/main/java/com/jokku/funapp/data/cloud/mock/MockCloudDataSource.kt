@@ -16,7 +16,6 @@ interface SimpleCall<T> : Call<T> {
     override fun cancel() = Unit
     override fun isCanceled(): Boolean = false
     override fun request(): Request = throw IllegalStateException("not used")
-    override fun execute(): Response<T> = throw IllegalStateException("not used")
     override fun timeout(): Timeout = throw IllegalStateException("not used")
 }
 

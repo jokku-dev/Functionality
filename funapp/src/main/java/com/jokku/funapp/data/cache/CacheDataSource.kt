@@ -28,7 +28,7 @@ abstract class BaseCacheDataSource<T : RealmObject, E>(
     protected abstract fun findRealmObject(realm: MutableRealm, id: E): T?
 
     override suspend fun addOrRemove(id: E, model: RepoModel<E>): RepoModel<E> =
-        realmProvider.provide().writeBlocking {
+        realmProvider.provideRealm().writeBlocking {
             val realmItem = findRealmObject(this, id)
             if (realmItem == null) {
                 val newJoke = model.map(fromRepoMapper)
@@ -40,7 +40,7 @@ abstract class BaseCacheDataSource<T : RealmObject, E>(
             }
         }
 
-    override suspend fun remove(id: E): Unit = realmProvider.provide().writeBlocking {
+    override suspend fun remove(id: E): Unit = realmProvider.provideRealm().writeBlocking {
         findRealmObject(this, id)?.let { delete(it) }
     }
 
@@ -54,7 +54,7 @@ abstract class BaseCacheDataSource<T : RealmObject, E>(
     }
 
     private fun <R> getRealmData(block: (list: RealmResults<T>) -> R) =
-        realmProvider.provide().writeBlocking {
+        realmProvider.provideRealm().writeBlocking {
             block.invoke(query(realmClazz).find())
         }
 }

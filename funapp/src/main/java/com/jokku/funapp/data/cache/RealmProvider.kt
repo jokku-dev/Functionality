@@ -4,11 +4,11 @@ import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 
 interface RealmProvider {
-    fun provide(): Realm
+    fun provideRealm(): Realm
 }
 
 class BaseRealmProvider(private val useMocks: Boolean) : RealmProvider {
-    override fun provide(): Realm {
+    override fun provideRealm(): Realm {
         val fileName = if (useMocks) MOCKS else NAME
         val config =
             RealmConfiguration.Builder(setOf(JokeRealmModel::class, QuoteRealmModel::class))
