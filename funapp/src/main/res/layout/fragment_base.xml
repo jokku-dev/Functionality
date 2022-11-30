@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presentation.MainActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fun_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        custom:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <com.jokku.funapp.presentation.content.FunDataView
+        android:id="@+id/fun_data_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:actionButtonText="@string/get_joke"
+        tools:checkBoxText="@string/show_favorite_joke" />
+
+</LinearLayout>

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Fun App</string>
+    <string name="get_joke">Get Joke</string>
+    <string name="get_quote">Get Quote</string>
+    <string name="no_connection">No internet connection</string>
+    <string name="service_unavailable">Service is unavailable</string>
+    <string name="show_favorite_joke">Show favorite joke</string>
+    <string name="show_favorite_quote">Show favorite quote</string>
+    <string name="no_cached_data">No favorites! Add one tapping heart icon</string>
+    <string name="generic_fail_message">Unknown error</string>
+    <string name="remove_from_favorites">Remove from favorites?</string>
+    <string name="yes">Yes</string>
+    <string name="jokes">Jokes</string>
+    <string name="quotes">Quotes</string>
+</resources>
