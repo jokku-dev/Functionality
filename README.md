@@ -1,7 +1,11 @@
 ## This project is for practicing working with crucial android components
 
-- **text-quest** - spannable strings
+- **textquest** - spannable strings
 
 - **images** - picasso, glide circle image
 
-- **fields-and-buttons** - register screen with text check patterns
+- **fieldsandbuttons** - register screen with text check patterns
+
+- **mvvmcustom** - timer on callbacks
+
+- **funapp** - clean architecture, mvvm, coroutines, realm, retrofit, UItests. Simple app to make your day
